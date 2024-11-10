@@ -1,0 +1,36 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { PostsComponent } from './posts/posts.component';
+import { TrendsComponent } from './trends/trends.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
+import { ProfilesComponent } from './profiles/profiles.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { PostListComponent } from './post-list/post-list.component';
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    PostsComponent,
+    TrendsComponent,
+    AnalyticsComponent,
+    ProfilesComponent,
+    CreatePostComponent,
+    PostListComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
+    HttpClientModule 
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

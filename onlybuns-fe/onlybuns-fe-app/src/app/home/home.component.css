@@ -1,0 +1,24 @@
+.admin-home {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .nav-links {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin: 15px 0;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #007bff;
+  }
+  
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
+  
