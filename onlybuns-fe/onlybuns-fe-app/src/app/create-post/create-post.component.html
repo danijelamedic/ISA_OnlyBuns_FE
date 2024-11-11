@@ -1,14 +1,21 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="postForm">
     <label for="description">Opis objave</label>
-    <input id="description" formControlName="description" type="text" required>
-  
-    <label for="image">Slika zeca</label>
-    <input id="image" type="file" (change)="onImageSelected($event)" required>
-  
-    <label for="location">Lokacija objave</label>
-    <input id="location" formControlName="location" type="text" placeholder="Unesite adresu ili odaberite na mapi">
+    <input id="description" formControlName="description" type="text" required />
     
-    <!-- Dodaj mapu ovde ako želiš opciju za interaktivni izbor lokacije -->
+    <label for="image">Slika</label>
+    <input id="image" type="file" (change)="onImageSelected($event)" required />
+    
+    <label for="latitude">Latitude</label>
+    <input id="latitude" formControlName="latitude" type="number" step="any" readonly />
+    
+    <label for="longitude">Longitude</label>
+    <input id="longitude" formControlName="longitude" type="number" step="any" readonly />
+    
+    <label for="address">Adresa</label>
+    <input id="address" type="text" [value]="address" readonly />
   
+    <div id="map" style="height: 300px; margin-top: 10px;"></div>
+    
     <button type="submit">Postavi objavu</button>
-</form>
+  </form>
+  
