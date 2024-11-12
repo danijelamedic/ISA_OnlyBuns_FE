@@ -12,6 +12,7 @@ import { ProfilesComponent } from './profiles/profiles.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ShowPostComponent } from './show-post/show-post.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     AnalyticsComponent,
     ProfilesComponent,
     CreatePostComponent,
-    PostListComponent
+    PostListComponent,
+    ShowPostComponent
   ],
   imports: [
     BrowserModule,
