@@ -1,0 +1,30 @@
+<div class="container">
+    <h2>Prijava</h2>
+    <!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"> -->
+    <form>
+        <div class="form-group">
+            <label for="email">Email adresa</label>
+            <input id="email" type="email" class="form-control" formControlName="email" placeholder="Unesite email" />
+            <!-- <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
+                <small *ngIf="loginForm.get('email')?.errors?.['required']">Email je obavezan.</small>
+                <small *ngIf="loginForm.get('email')?.errors?.['email']">Unesite važeću email adresu.</small>
+            </div> -->
+        </div>
+
+        <div class="form-group">
+            <label for="password">Lozinka</label>
+            <input id="password" type="password" class="form-control" formControlName="password"
+                placeholder="Unesite lozinku" />
+            <!-- <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+                <small *ngIf="loginForm.get('password')?.errors?.['required']">Lozinka je obavezna.</small>
+            </div> -->
+        </div>
+
+        <!-- <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Prijavi se</button> -->
+            <button type="submit" class="btn btn-primary">Prijavi se</button>
+    </form>
+
+    <!-- <div *ngIf="loginError" class="text-danger mt-3">
+        <p>Greška pri prijavi. Proverite email adresu i lozinku.</p>
+    </div> -->
+</div>

@@ -4,6 +4,7 @@ import { Comment } from '../model/comment.model';
 import { PostService } from '../post.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdatePostDto } from '../model/update-post.dto.model';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-show-post',
@@ -35,18 +36,30 @@ export class ShowPostComponent {
     imagePath: ''
   };
 
-  
-  constructor(private postService: PostService, private fb: FormBuilder){
+  // isAuthenticated(): boolean {
+  // // Proverava da li postoji token u localStorage
+  //   return !!localStorage.getItem('authToken');
+  // }
+  isAuthenticated: boolean;  // Ovaj tip treba biti boolean
+
+  constructor(
+    private postService: PostService, 
+    private fb: FormBuilder,
+    private authService: AuthService // Injektuj AuthService
+  ) {
     this.updateForm = this.fb.group({
       description: [''],
       image: [null]
     });
-  }
 
-  ngOnInit(): void{
-    this.getPosts();
-    this.getPostsByUserId(7);
+    this.isAuthenticated = this.authService.isLoggedIn(); // Dodeli vrednost boolean
   }
+ngOnInit(): void {
+  this.getPosts();
+  if (this.authService.isLoggedIn()) {
+    this.getPostsByUserId(7); // Poziva se samo ako je korisnik prijavljen
+  }
+}
 
   getPosts(): void{
     this.postService.showPost().subscribe({
@@ -129,10 +142,18 @@ export class ShowPostComponent {
   }
 
   toggleCommentForm(): void {
+    if (!this.isAuthenticated) {
+      alert('Morate biti prijavljeni da biste dodali komentar.');
+      return;
+    }
     this.isCommentFormVisible = !this.isCommentFormVisible;
   }
 
   addComment(): void {
+    if (!this.isAuthenticated) {
+      alert('Morate biti prijavljeni da biste dodali komentar.');
+      return;
+    }
     if (this.newCommentText.trim()) {
       console.log('Komentar:', this.newCommentText);
       this.newCommentText = '';
@@ -140,6 +161,15 @@ export class ShowPostComponent {
     } else {
       console.warn('Komentar ne može biti prazan');
     }
+  }
+
+    // Provera autentifikacije prilikom lajkovanja
+  likePost(postId: number): void {
+    if (!this.isAuthenticated) {
+      alert('Morate biti prijavljeni da biste lajkovali objavu.');
+      return;
+    }
+    // Implementacija lajkovanja...
   }
 
   getPostsByUserId(userId: number): void{

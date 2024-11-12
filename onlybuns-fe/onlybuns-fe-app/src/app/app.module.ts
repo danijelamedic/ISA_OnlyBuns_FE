@@ -13,6 +13,9 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ShowPostComponent } from './show-post/show-post.component';
+import { AuthService } from './auth/auth.service';
+import { RegistrationComponent } from './registration/registration.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { ShowPostComponent } from './show-post/show-post.component';
     ProfilesComponent,
     CreatePostComponent,
     PostListComponent,
-    ShowPostComponent
+    ShowPostComponent,
+    RegistrationComponent, 
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,7 @@ import { ShowPostComponent } from './show-post/show-post.component';
     ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
     HttpClientModule 
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
