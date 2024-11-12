@@ -1,0 +1,58 @@
+<p>Registered users</p>
+<div class="filters-container">
+  <div class="filter-row">
+    <div class="filter">
+      <input type="text" placeholder="Pretraga po imenu" [(ngModel)]="searchName" />
+      <input type="text" placeholder="Pretraga po prezimenu" [(ngModel)]="searchSurnameValue" />
+      <input type="text" placeholder="Pretraga po email-u" [(ngModel)]="searchEmail" />
+      <input type="number" placeholder="Min Posts" [(ngModel)]="minPosts" class="narrow-input" />
+      <input type="number" placeholder="Max Posts" [(ngModel)]="maxPosts" class="narrow-input" />
+
+
+    </div>
+    <div class="filter">
+      <button class="button" (click)="searchByName(searchName)">Search by Name</button>
+      <button class="button" (click)="searchBySurname(searchSurnameValue)">Search by Surname</button>
+      <button class="button" (click)="searchByEmail(searchEmail)">Search by Email</button>
+      <button class="button" (click)="filterByPostsNumber(minPosts, maxPosts)">Filter by Posts Number</button>
+
+
+    </div>
+  </div>
+  
+  <div class="filter-row">
+    <div class="filter">
+    </div>
+    <div class="filter">
+    </div>
+  </div>
+
+  <!-- Dugme za reset filtera -->
+  <div class="reset-button">
+    <button class="button" (click)="resetFilters()">Reset Filters</button>
+  </div>
+</div>
+
+
+<div>
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th (click)="sortByMail()">Email</th>
+        <th>Posts num</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.surname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.postsNum }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
