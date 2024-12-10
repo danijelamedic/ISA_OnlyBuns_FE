@@ -1,4 +1,4 @@
-<p>Registered users</p>
+<h1>Registered users</h1>
 <div class="filters-container">
   <div class="filter-row">
     <div class="filter">
@@ -55,4 +55,10 @@
       </tr>
     </tbody>
   </table>
+
+  <div>
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+    <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">Next</button>
+  </div>
 </div>

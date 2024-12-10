@@ -1,4 +1,4 @@
-.users-table {
+/* .users-table {
     width: 100%;
     border-collapse: collapse;
   }
@@ -21,21 +21,21 @@
   }
   
   .button {
-    background-color: gray; /* Crvena boja pozadine dugmeta */
-    color: white;  /* Bele slova na dugmetu */
-    border: none;  /* Ukloni ivicu dugmeta */
-    border-radius: 25px; /* Ovalne ivice dugmeta */
-    padding: 10px 20px; /* Povećaj unutrašnju marginu da bi dugme bilo veće */
-    font-size: 16px; /* Veličina fonta za tekst na dugmetu */
-    cursor: pointer; /* Dodaj pokazivač kursora kada je dugme iznad */
-    transition: background-color 0.3s ease; /* Dodaj animaciju pri promeni boje */
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
     margin-right: 15px;
     margin-left: 80px;
     margin-bottom: 20px;
     }
     
     .button:hover {
-    background-color: darkgray; /* Tamnija crvena boja kad se pređe mišem preko dugmeta */
+    background-color: darkgray; 
     }
 
     input {
@@ -43,14 +43,132 @@
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      height: 40px; /* Povecana visina svih input polja */
-      box-sizing: border-box; /* Osigurava da padding ne menja širinu box-a */
+      height: 40px;
+      box-sizing: border-box;
       margin-right: 15px;
     margin-left: 50px;
 
     }
 
     p {
-      font-size: 24px; /* Povećava veličinu teksta */
-      font-weight: bold; /* Čini tekst boldovanim */
-    }
+      font-size: 24px; 
+      font-weight: bold;
+    } */
+
+/* Globalne postavke */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Kontener za tabelu korisnika */
+.users-table {
+  width: 80%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Zaglavlje tabele */
+.users-table th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+/* Redovi u tabeli */
+.users-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Hover efekat na redovima */
+.users-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Dugmadi */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin: 0 50px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Dugmadi za navigaciju i filtere */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Polja za pretragu */
+input[type="text"],
+input[type="number"] {
+  padding: 8px;
+  margin: 5px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Filteri */
+.filters-container {
+  width: 80%;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.filter {
+  flex: 1;
+  margin: 10px;
+}
+
+/* Reset dugme */
+.reset-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Navigacija (Previous, Next, Page number) */
+.reset-button {
+  text-align: center;
+}
+
+div > span {
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+.users-table th:nth-child(5), 
+.users-table td:nth-child(5) {
+    text-align: center;
+}

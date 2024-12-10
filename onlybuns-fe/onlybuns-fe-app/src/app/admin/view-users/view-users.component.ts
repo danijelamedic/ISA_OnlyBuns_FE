@@ -9,6 +9,11 @@ import { UserService } from '../user.service';
 })
 export class ViewUsersComponent implements OnInit{
   users: User[] = [];
+  totalUsers: number = 0;
+  totalPages: number = 3;
+  currentPage: number = 0;
+  pageSize: number = 5;
+
   searchName: string = '';
   searchSurnameValue: string = '';
   searchEmail: string = '';
@@ -30,9 +35,16 @@ export class ViewUsersComponent implements OnInit{
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe({
-      next: (users: User[]) => {
-        this.users = users;
+    this.userService.getUsers(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        console.log("response: ", response);
+        if(Array.isArray(response)){
+          this.users = response;
+          console.log("users:", this.users);
+        }
+        else{
+          console.error('Response does not contain valid users data');
+        }
       },
       error: (err) => {
         console.error('Error fetching users', err);
@@ -109,5 +121,12 @@ export class ViewUsersComponent implements OnInit{
     
     // Pozivanje loadUsers da se ponovo učitaju svi korisnici bez filtera
     this.getUsers();
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.getUsers();
+    }
   }
 }
