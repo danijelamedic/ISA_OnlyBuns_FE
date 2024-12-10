@@ -1,0 +1,97 @@
+<div class="tabs">
+  <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Posts</button>
+  <button (click)="selectTab(2)" [class.active]="selectedTab === 2">My posts</button>
+</div>
+
+
+<!-- Svi postovi -->
+
+<div *ngIf="selectedTab === 1">
+  <div class="post" *ngFor="let post of posts">
+    <div class="post-header">
+      <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
+      <p>{{ post.creationTime | date: 'short' }}</p>
+    </div>
+    
+    <p>{{ post.description }}</p>
+
+    <div class="post-image" *ngIf="post.imagePath">
+      <img [src]="'http://localhost:8080' + post.imagePath" alt="Post image" class="post-image"/>
+    </div>
+    
+    <div class="post-footer">
+      <p>{{ likesNum[post.id] || 'Loading...'}}
+        <span class="red-heart">❤️</span>
+      </p>
+      <button class="like-button">Like</button>
+      <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
+      <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
+      <button (click)="toggleCommentForm()" class="button">Add comment</button>
+      
+    </div>
+
+    <div *ngIf="post.isCommentsVisible" class="comments-section">
+      <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
+        <div class="comment-header">
+          <strong>{{ comment.userId }}</strong>
+          <span>{{ comment.timestamp | date: 'short' }}</span>
+        </div>
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+
+
+  <!-- Forma za dodavanje komentara -->
+  <div *ngIf="isCommentFormVisible">
+    <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
+    <br>
+    <button >Dodaj komentar</button>
+  </div>
+</div>
+</div>
+
+
+<!-- Postovi usera -->
+<div *ngIf="selectedTab === 2">
+  <div class="post" *ngFor="let post of postsByUser">
+    <div class="post-header">
+      <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
+      <p>{{ post.creationTime | date: 'short' }}</p>
+    </div>
+    
+    <p>{{ post.description }}</p>
+
+    <div class="post-image" *ngIf="post.imagePath">
+      <img [src]="'http://localhost:8080' + post.imagePath" alt="Post image" class="post-image"/>
+    </div>
+    
+    <div class="post-footer">
+      <p>{{ likesNum[post.id] || 'Loading...'}}
+        <span class="red-heart">❤️</span>
+      </p>
+      <!-- <button class="like-button">Like</button> -->
+      <!-- <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button> -->
+      <!-- <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button> -->
+      <!-- <button class="button" (click)="toggleCommentForm()">Add comment</button> -->
+      <button (click)="openUpdateModal(post)" class="button">Update</button>
+      <button (click)="deletePost(post.id)" class="button">Delete</button>
+    </div>
+    <div *ngIf="isUpdateModalOpen" class="modal">
+      <div class="modal-content">
+        <h2>Update Post</h2>
+        <form [formGroup]="updateForm" (ngSubmit)="onUpdatePost()">
+          <label for="description">Description:</label>
+          <textarea id="description" formControlName="description" placeholder="Enter new description"></textarea>
+          
+          <label for="image">Image:</label>
+          <input type="file" (change)="onFileChange($event)" accept="image/*"/>
+          <img *ngIf="selectedImage" [src]="imagePreview" alt="Selected image" class="image-preview" />
+    
+          <button type="submit" [disabled]="updateForm.invalid">Submit</button>
+          <button type="button" (click)="closeUpdateModal()">Cancel</button>
+        </form>
+      </div>
+  </div>
+  
+</div>
+
