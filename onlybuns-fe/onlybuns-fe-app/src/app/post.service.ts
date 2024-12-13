@@ -5,6 +5,7 @@ import { Post } from './model/post.model';
 import { Comment } from './model/comment.model';
 import { User } from './model/user.model';
 import { UpdatePostDto } from './model/update-post.dto.model';
+import { Like } from './model/like.model';
 
 
 @Injectable({
@@ -49,5 +50,10 @@ export class PostService {
 
   updatePost(updatePostDto: UpdatePostDto): Observable<any>{
     return this.http.put('http://localhost:8080/api/posts', updatePostDto);
+  }
+
+  likePost(postId: number, userId: number): Observable<Like>{
+    console.log(`Pozivam POST zahtev za postId: ${postId}, userId: ${userId}`);
+    return this.http.post<Like>('http://localhost:8080/api/like/' + postId + '/' + userId, null);
   }
 }

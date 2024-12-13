@@ -17,7 +17,7 @@ export class ShowPostComponent {
   defaultUserId: number = 1;
   commentsForPost: { [key: number]: Comment[] } = {};
   isCommentsVisible: boolean = false;
-  userId: number = 0;
+  userId: number = 7;
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
   postsByUser: Post[] = [];
@@ -229,4 +229,18 @@ export class ShowPostComponent {
       });
     }
   }
+
+  likePost(postId: number): void {
+    console.log("Usao je u metodu likePost sa postId: ", postId);
+    this.postService.likePost(postId, this.userId).subscribe({
+      next: () => {
+        console.log('Lajkovan je post', postId);
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error("Greška prilikom lajkovanja posta: ", postId, error);
+      }
+    });
+  }
+  
 }
