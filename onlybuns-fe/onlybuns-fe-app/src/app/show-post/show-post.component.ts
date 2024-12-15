@@ -308,20 +308,25 @@ export class ShowPostComponent {
   }
   
 
-  followUser(followedUserId: number) : void{
+  followUser(followedUserId: number): void {
     this.userService.follow(this.userId, followedUserId).subscribe({
       next: (result: any) => {
-        if(result){
+        if (result) {
           this.isFollowed = true;
-          ("zapratio sam ga");
+          console.log("Successfully followed the user.");
           window.location.reload();
         }
       },
       error: (error: any) => {
-        console.error('Error following user:', error); 
+        if (error.status === 429) {
+          alert("Too many requests. Please try again later.");
+        } else {
+          console.error("Error following user:", error);
+        }
       }
     });
   }
+  
 
   unfollowUser(followedUserId: number) : void{
     this.userService.unfollow(this.userId, followedUserId).subscribe({
