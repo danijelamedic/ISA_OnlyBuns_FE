@@ -56,7 +56,11 @@ export class UserService {
     return this.http.post<Follower>('http://localhost:8080/api/follower/' + userId + '/' + followedUserId, null);
   } 
 
-  unfollow(userId: number, followedUserId: number): void{
-    this.http.delete('http://localhost:8080/api/follower/' + userId + '/' + followedUserId);
+  unfollow(userId: number, followedUserId: number): Observable<Follower>{
+    return this.http.delete<Follower>('http://localhost:8080/api/follower/' + userId + '/' + followedUserId);
+  }
+
+  getUserById(userId: number): Observable<User>{
+    return this.http.get<User>('http://localhost:8080/api/users/' + userId);
   }
 }

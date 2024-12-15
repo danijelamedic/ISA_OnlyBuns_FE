@@ -56,4 +56,8 @@ export class PostService {
     console.log(`Pozivam POST zahtev za postId: ${postId}, userId: ${userId}`);
     return this.http.post<Like>('http://localhost:8080/api/like/' + postId + '/' + userId, null);
   }
+
+  getFollowingPosts(userId: number): Observable<Post[]>{
+    return this.http.get<Post[]>('http://localhost:8080/api/posts/getFollowing/' + userId);
+  }
 }

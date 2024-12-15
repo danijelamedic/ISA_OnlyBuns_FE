@@ -1,15 +1,17 @@
 <div class="tabs">
-  <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Posts</button>
+  <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Explore</button>
   <button (click)="selectTab(2)" [class.active]="selectedTab === 2">My posts</button>
+  <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Following</button>
 </div>
 
 
 <!-- Svi postovi -->
 
 <div *ngIf="selectedTab === 1">
-  <div class="post" *ngFor="let post of posts">
+  <div class="post" *ngFor="let post of explorePosts">
     <div class="post-header">
       <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
+      <button *ngIf="post.userId" (click)="followUser(post.userId)">Follow</button>
       <p>{{ post.creationTime | date: 'short' }}</p>
     </div>
     
@@ -20,7 +22,7 @@
     </div>
     
     <div class="post-footer">
-      <p>{{ likesNum[post.id] || 'Loading...'}}
+      <p>{{ likesNum[post.id] }}
         <span class="red-heart">❤️</span>
       </p>
       <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
@@ -41,13 +43,13 @@
     </div>
 
 
-  <!-- Forma za dodavanje komentara -->
-  <div *ngIf="isCommentFormVisible">
-    <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
-    <br>
-    <button >Dodaj komentar</button>
+    <!-- Forma za dodavanje komentara -->
+    <div *ngIf="isCommentFormVisible">
+      <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
+      <br>
+      <button >Dodaj komentar</button>
+    </div>
   </div>
-</div>
 </div>
 
 
@@ -66,7 +68,7 @@
     </div>
     
     <div class="post-footer">
-      <p>{{ likesNum[post.id] || 'Loading...'}}
+      <p>{{ likesNum[post.id] }}
         <span class="red-heart">❤️</span>
       </p>
       <!-- <button class="like-button">Like</button> -->
@@ -91,7 +93,55 @@
           <button type="button" (click)="closeUpdateModal()">Cancel</button>
         </form>
       </div>
+    </div>
   </div>
-  
 </div>
 
+
+    <!-- Following posts -->
+
+
+<div *ngIf="selectedTab === 3">
+  <div class="post" *ngFor="let post of followingPosts">
+    <div class="post-header">
+      <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
+      <button (click)="unfollowUser(post.userId)">Unfollow</button>
+      <p>{{ post.creationTime | date: 'short' }}</p>
+    </div>
+    
+    <p>{{ post.description }}</p>
+
+    <div class="post-image" *ngIf="post.imagePath">
+      <img [src]="'http://localhost:8080' + post.imagePath" alt="Post image" class="post-image"/>
+    </div>
+    
+    <div class="post-footer">
+      <p>{{ likesNum[post.id] }}
+        <span class="red-heart">❤️</span>
+      </p>
+      <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
+      <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
+      <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
+      <button (click)="toggleCommentForm()" class="button">Add comment</button>
+      
+    </div>
+
+    <div *ngIf="post.isCommentsVisible" class="comments-section">
+      <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
+        <div class="comment-header">
+          <strong>{{ comment.userId }}</strong>
+          <span>{{ comment.timestamp | date: 'short' }}</span>
+        </div>
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+
+
+    <!-- Forma za dodavanje komentara -->
+    <div *ngIf="isCommentFormVisible">
+      <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
+      <br>
+      <button >Dodaj komentar</button>
+    </div>
+  </div>
+</div>
