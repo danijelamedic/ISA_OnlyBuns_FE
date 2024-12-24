@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/model/user.model';
+import { Role, User } from 'src/app/model/user.model';
 import { UserService } from '../user.service';
 
 @Component({
@@ -25,7 +25,8 @@ export class ViewUsersComponent implements OnInit{
     name: '',
     surname: '',
     email: '',
-    postsNum: 0
+    postsNum: 0,
+    role: Role.REGISTERED_USER
   };
 
   constructor(private userService: UserService){}
