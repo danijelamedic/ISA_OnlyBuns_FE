@@ -63,4 +63,28 @@ export class UserService {
   getUserById(userId: number): Observable<User>{
     return this.http.get<User>('http://localhost:8080/api/users/' + userId);
   }
+
+  getCommentsPerWeek(week: number, year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getCommentsPerWeek/' + week + '/' + year);
+  }
+
+  getCommentsPerMonth(month: number, year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getCommentsPerMonth/' + month + '/' + year);
+  }
+
+  getCommentsPerYear(year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getCommentsPerYear/' + year);
+  }
+
+  getPostsPerWeek(week: number, year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getPostsPerWeek/' + week + '/' + year);
+  }
+
+  getPostsPerMonth(month: number, year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getPostsPerMonth/' + month + '/' + year);
+  }
+
+  getPostsPerYear(year: number): Observable<number> {
+    return this.http.get<number>('http://localhost:8080/api/admin/getPostsPerYear/' + year);
+  }
 }

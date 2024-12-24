@@ -1,1 +1,99 @@
-<p>analytics works!</p>
+<div class="analytics">
+    <div class="comment-analytics">
+        <h1>Comment analytics for:</h1>
+      
+        <!-- Radio buttons for selection -->
+        <div class="options">
+          <label>
+            <input type="radio" name="option" value="week" (change)="setCommentMode('week')" />
+            Week
+          </label>
+          <label>
+            <input type="radio" name="option" value="month" (change)="setCommentMode('month')" />
+            Month
+          </label>
+          <label>
+            <input type="radio" name="option" value="year" (change)="setCommentMode('year')" />
+            Year
+          </label>
+        </div>
+      
+        <!-- Inputs based on the selected mode -->
+        <div *ngIf="mode === 'week'" class="input-group">
+            <label for="week">Select Week:</label>
+            <input type="week" id="week" [(ngModel)]="week" />
+      
+          <button (click)="fetchCommentData()">Show</button>
+        </div>
+      
+        <div *ngIf="mode === 'month'" class="input-group">
+          <label for="month">Month:</label>
+          <input type="month" id="month" [(ngModel)]="month" />
+      
+          <button (click)="fetchCommentData()">Show</button>
+        </div>
+      
+        <div *ngIf="mode === 'year'" class="input-group">
+          <label for="year">Year:</label>
+          <input type="number" id="year" [(ngModel)]="year" min="2000" max="2100" />
+      
+          <button (click)="fetchCommentData()">Show</button>
+        </div>
+      
+        <!-- Result Display -->
+        <div class="result">
+          <!-- <h2>Result:</h2> -->
+          <p *ngIf="result !== undefined" [ngClass]="{'large-text': result !== undefined}">{{ result }}</p>
+          <p *ngIf="result === undefined" class="nodata">No data available.</p>
+        </div>
+    </div>
+
+    <div class="post-analytics">
+        <h1>Post analytics for:</h1>
+      
+        <!-- Radio buttons for selection -->
+        <div class="options">
+          <label>
+            <input type="radio" name="post-option" value="week" (change)="setPostMode('week')" />
+            Week
+          </label>
+          <label>
+            <input type="radio" name="post-option" value="month" (change)="setPostMode('month')" />
+            Month
+          </label>
+          <label>
+            <input type="radio" name="post-option" value="year" (change)="setPostMode('year')" />
+            Year
+          </label>
+        </div>
+      
+        <!-- Inputs based on the selected mode -->
+        <div *ngIf="postMode === 'week'" class="input-group">
+          <label for="post-week">Select Week:</label>
+          <input type="week" id="post-week" [(ngModel)]="postWeek" />
+      
+          <button (click)="fetchPostData()">Show</button>
+        </div>
+      
+        <div *ngIf="postMode === 'month'" class="input-group">
+          <label for="post-month">Month:</label>
+          <input type="month" id="post-month" [(ngModel)]="postMonth" />
+      
+          <button (click)="fetchPostData()">Show</button>
+        </div>
+      
+        <div *ngIf="postMode === 'year'" class="input-group">
+          <label for="post-year">Year:</label>
+          <input type="number" id="post-year" [(ngModel)]="postYear" min="2000" max="2100" />
+      
+          <button (click)="fetchPostData()">Show</button>
+        </div>
+      
+        <!-- Result Display -->
+        <div class="result">
+          <!-- <h2>Result:</h2> -->
+          <p *ngIf="postResult !== undefined" [ngClass]="{'large-text': postResult !== undefined}">{{ postResult }}</p>
+          <p *ngIf="postResult === undefined" class="nodata">No data available.</p>
+        </div>
+      </div>
+</div>
