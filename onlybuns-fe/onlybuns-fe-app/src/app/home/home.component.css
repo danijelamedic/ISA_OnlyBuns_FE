@@ -1,8 +1,20 @@
 .admin-home {
-    text-align: center;
-    margin-top: 30px;
+  display: flex;
+  justify-content: space-between; /* Postavlja razmak između elemenata */
   }
-  
+
+  .panel {
+    flex:1;
+    max-width: 15%;
+    margin-right: 10px; /* Dodaje 10px razmak sa desne strane */
+    padding: 20px;
+    border-right: 2px solid #333; /* Dodaje vertikalni border sa desne strane */
+  }
+
+  .admin-show-users{
+    flex:1;
+  }
+
   .nav-links {
     list-style-type: none;
     padding: 0;
@@ -15,10 +27,145 @@
   .nav-links a {
     text-decoration: none;
     font-size: 18px;
-    color: #007bff;
+    color: #45a049;
   }
   
   .nav-links a:hover {
     text-decoration: underline;
   }
   
+  
+/* Globalne postavke */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Kontener za tabelu korisnika */
+.users-table {
+  width: 80%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Zaglavlje tabele */
+.users-table th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+/* Redovi u tabeli */
+.users-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Hover efekat na redovima */
+.users-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Dugmadi */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin: 0 50px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Dugmadi za navigaciju i filtere */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Polja za pretragu */
+input[type="text"] {
+  padding: 8px;
+  margin: 5px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+input[type="number"] {
+  padding: 8px;
+  margin: 5px;
+  width: 80px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Filteri */
+.filters-container {
+  width: 80%;
+  margin: 10px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.filter {
+  flex: 1;
+}
+
+.filter button{
+  margin:38px;
+}
+
+/* Reset dugme */
+.reset-button {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Navigacija (Previous, Next, Page number) */
+.reset-button {
+  text-align: center;
+}
+
+div > span {
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+.users-table th:nth-child(5), 
+.users-table td:nth-child(5) {
+    text-align: center;
+}
+
+.buttons{
+  display: flex;
+  justify-content: center; /* Centriranje sadržaja horizontalno */
+  align-items: center;     /* Centriranje sadržaja vertikalno (ako je potrebno) */
+  margin-top: 20px;  
+}
