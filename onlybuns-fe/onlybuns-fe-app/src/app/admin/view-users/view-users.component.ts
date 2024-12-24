@@ -9,6 +9,11 @@ import { UserService } from '../user.service';
 })
 export class ViewUsersComponent implements OnInit{
   users: User[] = [];
+  totalUsers: number = 0;
+  totalPages: number | null = 0;
+  currentPage: number = 0;
+  pageSize: number = 5;
+
   searchName: string = '';
   searchSurnameValue: string = '';
   searchEmail: string = '';
@@ -26,13 +31,21 @@ export class ViewUsersComponent implements OnInit{
   constructor(private userService: UserService){}
 
   ngOnInit(): void {
+    this.getTotalUsersCount();
     this.getUsers();
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe({
-      next: (users: User[]) => {
-        this.users = users;
+    this.userService.getUsers(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        console.log("response: ", response);
+        if(Array.isArray(response)){
+          this.users = response;
+          console.log("users:", this.users);
+        }
+        else{
+          console.error('Response does not contain valid users data');
+        }
       },
       error: (err) => {
         console.error('Error fetching users', err);
@@ -110,4 +123,29 @@ export class ViewUsersComponent implements OnInit{
     // Pozivanje loadUsers da se ponovo učitaju svi korisnici bez filtera
     this.getUsers();
   }
+
+  getTotalUsersCount(): void {
+    this.userService.getTotalUsersCount().subscribe({
+      next: (data: number) => {
+        this.totalPages = Math.ceil(data / this.pageSize);
+        console.log('Total pages:', this.totalPages);
+      },
+      error: (err) => {
+        console.error('Error getting total pages', err);
+      }
+    });
+  }
+
+  goToPage(page: number): void {
+    console.log("Go to page pozvan sa stranica:", page);
+    if(this.totalPages){
+      if (page >= 0 && page < this.totalPages) {
+        this.currentPage = page;
+        this.getUsers();
+      } else {
+        console.error("Page is out of range");
+      }
+    }
+  }
+
 }

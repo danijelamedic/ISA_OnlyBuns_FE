@@ -4,6 +4,9 @@ import { Comment } from '../model/comment.model';
 import { PostService } from '../post.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdatePostDto } from '../model/update-post.dto.model';
+import { User } from '../model/user.model';
+import { UserService } from '../admin/user.service';
+import { Follower } from '../model/follower.mode';
 
 @Component({
   selector: 'app-show-post',
@@ -17,7 +20,7 @@ export class ShowPostComponent {
   defaultUserId: number = 1;
   commentsForPost: { [key: number]: Comment[] } = {};
   isCommentsVisible: boolean = false;
-  userId: number = 0;
+  userId: number = 1;
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
   postsByUser: Post[] = [];
@@ -30,13 +33,16 @@ export class ShowPostComponent {
   imagePreview: string | ArrayBuffer | null = null;
   updatePostDto: UpdatePostDto = {
     id: 0,
-    userId: 7,
+    userId: 1,
     description: '',
     imagePath: ''
   };
-
+  followingPosts: Post[] = [];
+  followingUsers: User[] = [];
+  explorePosts: Post[] = [];
+  isFollowed: boolean = false;
   
-  constructor(private postService: PostService, private fb: FormBuilder){
+  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService){
     this.updateForm = this.fb.group({
       description: [''],
       image: [null]
@@ -45,7 +51,8 @@ export class ShowPostComponent {
 
   ngOnInit(): void{
     this.getPosts();
-    this.getPostsByUserId(7);
+    this.getPostsByUserId(1);
+    this.getFollowingPosts();
   }
 
   getPosts(): void{
@@ -61,6 +68,8 @@ export class ShowPostComponent {
           this.getLikesNum(post.id);
           post.isCommentsVisible = false; 
         });
+
+        this.getPeopleIFollow();
       },
       error: (error: any) => {
         console.error('Error loading posts:', error);
@@ -157,7 +166,10 @@ export class ShowPostComponent {
   selectTab(tabNumber: number): void {
     this.selectedTab = tabNumber;
     if (tabNumber === 2) {
-      this.getPostsByUserId(7);
+      this.getPostsByUserId(1);
+    }
+    else if(tabNumber === 3){
+      this.getFollowingPosts();
     }
   }
 
@@ -208,7 +220,7 @@ export class ShowPostComponent {
     if (this.updateForm.valid && this.selectedPostId !== null) {
       const updateDto: UpdatePostDto = {
         id: this.selectedPostId,
-        userId: 7,
+        userId: 1,
         description: this.updateForm.value.description,
         imagePath: this.selectedImage ? '/images/' + (this.selectedImage?.name ?? '') : ''
       };
@@ -228,5 +240,106 @@ export class ShowPostComponent {
         }
       });
     }
+  }
+
+  likePost(postId: number): void {
+    console.log("Usao je u metodu likePost sa postId: ", postId);
+    this.postService.likePost(postId, this.userId).subscribe({
+      next: () => {
+        console.log('Lajkovan je post', postId);
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error("Greška prilikom lajkovanja posta: ", postId, error);
+      }
+    });
+  }
+  
+  getFollowingPosts(): void{
+    this.postService.getFollowingPosts(this.userId).subscribe({
+      next: (posts: Post[]) => {
+        this.followingPosts = posts;
+        console.log('Loaded posts:', posts);
+        
+        this.followingPosts = posts;
+
+        posts.forEach(post => {
+          this.getUsernameByPost(post.id);
+          this.getLikesNum(post.id);
+          post.isCommentsVisible = false; 
+        });
+      },
+      error: (error: any) => {
+        console.error('Error loading posts:', error);
+      },
+      complete: () => {
+        console.log('Post loading complete');
+      }
+    });
+  }
+
+  getExplorePosts() : void{
+    if(this.posts.length > 0){
+      this.explorePosts = this.posts.filter(post => 
+        !this.followingPosts.some(followingPost => followingPost.id === post.id)
+      );
+      console.log('explore posts:', this.explorePosts);
+    }
+    console.log("nije prosao if");
+  }
+
+  getPeopleIFollow(): void{
+    this.userService.getFollowingUsers(this.userId).subscribe({
+      next: (result: User[]) => {
+        this.followingUsers = result;
+        console.log('following users: ', this.followingUsers);
+        this.getExplorePosts();
+      },
+      error: (error: any) => {
+        console.error('Error loading posts:', error); 
+      }
+    });
+  }
+
+  isUserFollowed(postUser: User): boolean {
+    return this.followingUsers?.some(user => 
+      user.id === postUser.id
+    );
+  }
+  
+
+  followUser(followedUserId: number): void {
+    this.userService.follow(this.userId, followedUserId).subscribe({
+      next: (result: any) => {
+        if (result) {
+          this.isFollowed = true;
+          console.log("Successfully followed the user.");
+          window.location.reload();
+        }
+      },
+      error: (error: any) => {
+        if (error.status === 429) {
+          alert("Too many requests. Please try again later.");
+        } else {
+          console.error("Error following user:", error);
+        }
+      }
+    });
+  }
+  
+
+  unfollowUser(followedUserId: number) : void{
+    this.userService.unfollow(this.userId, followedUserId).subscribe({
+      next: (result: any) => {
+        if(result){
+          this.isFollowed = false;
+          ("otpratio sam ga");
+          window.location.reload();
+        }
+      },
+      error: (error: any) => {
+        console.error('Error following user:', error); 
+      }
+    });
   }
 }
