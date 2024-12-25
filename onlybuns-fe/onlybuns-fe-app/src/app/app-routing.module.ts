@@ -7,7 +7,6 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { ShowPostComponent } from './show-post/show-post.component';
-import { ViewUsersComponent } from './admin/view-users/view-users.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,7 +16,7 @@ const routes: Routes = [
   { path: 'profiles', component: ProfilesComponent },
   { path: 'create-post', component: CreatePostComponent },
   { path: 'show-posts', component: ShowPostComponent },
-  { path: 'admin/users', component: ViewUsersComponent}
+  { path: 'admin', component: HomeComponent}
 ];
 
 @NgModule({

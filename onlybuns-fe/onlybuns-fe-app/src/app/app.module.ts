@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './admin/view-users/view-users.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ViewUsersComponent } from './admin/view-users/view-users.component';
     AppRoutingModule,
     ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
