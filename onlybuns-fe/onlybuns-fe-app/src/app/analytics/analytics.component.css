@@ -1,6 +1,6 @@
 .analytics {
     display: flex;
-    justify-content: center; /* Centriranje horizontalno */
+    justify-content: center; 
     gap: 20px;
   }
   
@@ -12,7 +12,7 @@
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centriranje sadržaja unutar svakog odeljka */
+    align-items: center;
   }
   
   h1 {
@@ -74,11 +74,11 @@
   }
   
   .nodata {
-    font-size: 1.5em; /* Normalna veličina */
+    font-size: 1.5em;
   }
   
   .large-text {
-    font-size: 70px; /* Veličina kada postoji postResult */
+    font-size: 70px;
     color: #45a049;
 
   }
@@ -87,4 +87,25 @@
     color: #888;
   }
   
+
+  .charts {
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px
+  }
   
+  .chart-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .title{
+    text-align: center;
+    color: #333;
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 2.5rem;
+  }

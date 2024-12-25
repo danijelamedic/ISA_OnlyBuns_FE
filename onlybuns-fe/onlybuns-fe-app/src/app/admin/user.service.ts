@@ -87,4 +87,16 @@ export class UserService {
   getPostsPerYear(year: number): Observable<number> {
     return this.http.get<number>('http://localhost:8080/api/admin/getPostsPerYear/' + year);
   }
+
+  getPostPercent(): Observable<number>{
+    return this.http.get<number>('http://localhost:8080/api/admin/getPostPercent');
+  }
+
+  getCommentPercent(): Observable<number>{
+    return this.http.get<number>('http://localhost:8080/api/admin/getCommentPercent');
+  }
+
+  getHaveNotAny(): Observable<number>{
+    return this.http.get<number>('http://localhost:8080/api/admin/getHaveNotAny');
+  }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../admin/user.service';
+import { ChartData, ChartOptions, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-analytics',
@@ -19,13 +20,34 @@ export class AnalyticsComponent {
   postYear: number | undefined;
   postResult: number | undefined;
 
-  // Comment Mode and Post Mode
   mode: string | undefined;
   postMode: string | undefined;
 
+  postPercent: number | undefined;
+  commentPercent: number | undefined;
+  nothingPercent: number | undefined;
+
+  public postChartData: ChartData<'doughnut', number[]> | undefined;
+  public commentChartData: ChartData<'doughnut', number[]> | undefined;
+  public nothingChartData: ChartData<'doughnut', number[]> | undefined;
+  public chartType: ChartType = 'doughnut'; // Tip grafikona (npr. 'pie', 'doughnut', 'bar')
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  };
+
   constructor(private service: UserService){}
 
-  // Set modes for comment and post
+  ngOnInit():void{
+    this.getPostPercent();
+    this.getCommentPercent();
+    this.getNothingPercent();
+  }
+
   setCommentMode(mode: string): void {
     this.mode = mode;
   }
@@ -78,7 +100,7 @@ export class AnalyticsComponent {
     switch (this.postMode) {
       case'week':
         if (this.postWeek) {
-          const [year, week] = this.postWeek.split('-W').map(Number); // parsira godinu i nedelju
+          const [year, week] = this.postWeek.split('-W').map(Number);
           if (year && week) {
             this.getPostsPerWeek(week, year);
           }
@@ -180,4 +202,71 @@ export class AnalyticsComponent {
     })
   }
 
+  getPostPercent():void{
+    this.service.getPostPercent().subscribe({
+      next: (result: number) => {
+        this.postPercent = result;
+        this.updatePostChartData();
+
+      },
+      error: (err) => {
+        console.error('Error fetching post percent', err);
+      }
+    })
+  }
+
+  getCommentPercent():void{
+    this.service.getCommentPercent().subscribe({
+      next: (result: number) => {
+        this.commentPercent = result;
+        this.updateCommentChartData();
+      },
+      error: (err) => {
+        console.error('Error fetching comment percent', err);
+      }
+    })
+  }
+
+  getNothingPercent():void{
+    this.service.getHaveNotAny().subscribe({
+      next: (result: number) => {
+        this.nothingPercent = result;
+        this.updateNothingChartData();
+
+      },
+      error: (err) => {
+        console.error('Error fetching nothing percent', err);
+      }
+    })
+  }
+
+  updatePostChartData(): void {
+    this.postChartData = {
+      datasets: [{
+        data: [this.postPercent ?? 0, 100 - (this.postPercent ?? 0)],
+        backgroundColor: ['#45a049', '#D3D3D3'],
+      }]
+    };
+  }
+
+  updateCommentChartData(): void {
+    this.commentChartData = {
+      datasets: [{
+        data: [this.commentPercent ?? 0, 100 - (this.commentPercent ?? 0)],
+        backgroundColor: ['#45a049', '#D3D3D3'],
+      }]
+    };
+  }
+
+  updateNothingChartData(): void {
+    this.nothingChartData = {
+      datasets: [{
+        data: [this.nothingPercent ?? 0, 100 - (this.nothingPercent ?? 0)],
+        backgroundColor: ['#45a049', '#D3D3D3'],
+      }]
+    };
+  }
+
+  // public chartLabels: string[] = ['Category A', 'Category B', 'Category C'];
+  
 }
