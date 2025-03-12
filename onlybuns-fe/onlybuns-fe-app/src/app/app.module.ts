@@ -16,6 +16,7 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './admin/view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
+import { WebSocketComponent } from './web-socket/web-socket.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { NgChartsModule } from 'ng2-charts';
     PostListComponent,
     ShowPostComponent,
     AdminComponent,
-    ViewUsersComponent
+    ViewUsersComponent,
+    WebSocketComponent
   ],
   imports: [
     BrowserModule,
