@@ -16,7 +16,7 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './admin/view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
-import { WebSocketComponent } from './web-socket/web-socket.component';
+import { SocketComponent } from './web-socket/web-socket.component';
 
 @NgModule({
   declarations: [
@@ -31,12 +31,12 @@ import { WebSocketComponent } from './web-socket/web-socket.component';
     ShowPostComponent,
     AdminComponent,
     ViewUsersComponent,
-    WebSocketComponent
+    SocketComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
+    ReactiveFormsModule, 
     HttpClientModule,
     FormsModule,
     NgChartsModule

@@ -10,7 +10,7 @@ import { Message } from '../model/message';
   providedIn: 'root',
 })
 export class SocketService {
-  url: string = environment.url + "api/socket";
+  url: string = "ws://localhost:8080/socket";
   restUrl:string = environment.url + "/sendMessageRest";
 
   constructor(private http: HttpClient) { }
