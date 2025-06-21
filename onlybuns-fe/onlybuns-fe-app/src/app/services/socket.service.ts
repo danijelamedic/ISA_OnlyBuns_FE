@@ -21,7 +21,11 @@ export class SocketService {
   }
 
   postRest(data: Message) {
-    return this.http.post<Message>(this.restUrl, data)
+    return this.http.post<Message>('http://localhost:8080/api/chat/send', data)
       .pipe(map((data: Message) => { return data; }));
+  }
+
+  getChatKey(data: Message){
+    return this.http.post<string>('http://localhost:8080/api/chat/chatKey', data)
   }
 }

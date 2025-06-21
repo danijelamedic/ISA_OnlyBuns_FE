@@ -1,5 +1,5 @@
 export interface Message {
     message: string,
-    fromId: string,
-    toId: string,
+    senderId: number,
+    receiverIds: number[],
 }

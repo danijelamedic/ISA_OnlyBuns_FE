@@ -10,6 +10,10 @@
         <div class="form-group">
           <input class="form-control" type="text" formControlName="fromId" name="fromId" placeholder="Your id">
         </div>
+        <div class="form-group">
+          <input class="form-control" type="text" formControlName="toId" name="toId"
+            placeholder="User id to send the message to">
+        </div>
 
         <div class="text-center">
           <input type="submit" class="btn btn-success" [disabled]="userForm.invalid || isCustomSocketOpened"
@@ -22,15 +26,14 @@
         <small>if user id is null the message will be sended to all users</small>
       </h3>
 
-      <form [formGroup]="form" (submit)="sendMessageUsingSocket()" *ngIf="isLoaded">
-
-        <div class="form-group">
-          <input class="form-control" type="text" formControlName="toId" name="toId"
-            placeholder="User id to send the message to">
-        </div>
+      <form [formGroup]="form" (submit)="openSocket()" *ngIf="isLoaded">
 
         <div class="form-group">
           <input class="form-control" type="text" formControlName="message" name="message" placeholder="Message">
+        </div>
+
+        <div class="form-group">
+          <input class="form-control" type="number" formControlName="chatId" name="chatId" placeholder="ChatId">
         </div>
 
         <div class="row text-center">
@@ -52,7 +55,7 @@
 
       <ul class="list-group">
         <li class="list-group-item list-group-item-success" *ngFor="let message of messages"
-          style="margin-bottom: 10px;">From: {{message.fromId}}, To: {{message.toId}}, Message:
+          style="margin-bottom: 10px;">From: {{message.senderId}}, To: {{message.receiverIds}}, Message:
           {{message.message}}</li>
       </ul>
 
