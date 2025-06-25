@@ -1,0 +1,36 @@
+<div class="userForm" *ngIf="!userId">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <p>unesi id</p>
+    <input formControlName="userId" type="number"/>
+    <button type="submit">ok</button>
+    </form>
+</div>
+
+<div class="inbox-container" *ngIf="userId">
+    <div class = "chat-list">
+        <div class="chat-box" *ngFor="let chat of chats" (click)="selectChat(chat.id)" [class.selected]="chat.id === selectedChatId">
+            {{chat.name || chat.receiverUsername || 'Nepoznat'}}
+        </div>
+    </div>
+
+
+
+    <div class = "chat">
+        <div class="chat-receiver">
+            {{ getChatDisplayName(selectedChatId) }}
+        </div>
+
+        <div class="messages" #scrollMe>
+           <div class="message"
+                *ngFor="let message of messages"
+                [ngClass]="{'message-left': message.senderId !== userId, 'message-right': message.senderId === userId}">
+                {{message.message}}
+            </div>
+        </div>
+
+        <div class="message-box">
+            <input type="text" placeholder="Napisi poruku..." [(ngModel)]="newMessageText" (keyup.enter)="sendMessage()" >
+        </div>
+    </div>
+
+</div>

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import { Client, IMessage, Stomp } from '@stomp/stompjs';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Message } from '../model/message';
+import { Chat } from '../model/chat.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +23,8 @@ export class SocketService {
   }
 
   postRest(data: Message) {
-    return this.http.post<Message>('http://localhost:8080/api/chat/send', data)
+    return this.http.post<Message>('http://localhost:8080/api/message/send', data)
       .pipe(map((data: Message) => { return data; }));
   }
 
-  getChatKey(data: Message){
-    return this.http.post<string>('http://localhost:8080/api/chat/chatKey', data)
-  }
 }

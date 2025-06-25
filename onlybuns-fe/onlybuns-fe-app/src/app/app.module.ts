@@ -17,6 +17,8 @@ import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './admin/view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
 import { SocketComponent } from './web-socket/web-socket.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { SocketComponent } from './web-socket/web-socket.component';
     ShowPostComponent,
     AdminComponent,
     ViewUsersComponent,
-    SocketComponent
+    SocketComponent,
+    InboxComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

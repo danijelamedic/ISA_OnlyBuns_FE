@@ -63,7 +63,10 @@ export class SocketComponent implements OnInit {
       let message: Message = {
         message: this.form.value.message,
         senderId: this.userForm.value.fromId,
-        receiverIds: recieverIds
+        receiverIds: recieverIds,
+        chatId: 0,
+        dateTime: '',
+        id: 0
       };
 
       console.log(message);
