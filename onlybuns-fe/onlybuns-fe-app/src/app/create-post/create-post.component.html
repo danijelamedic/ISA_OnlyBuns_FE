@@ -1,14 +1,24 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="postForm">
-    <label for="description">Opis objave</label>
-    <input id="description" formControlName="description" type="text" required>
-  
-    <label for="image">Slika zeca</label>
-    <input id="image" type="file" (change)="onImageSelected($event)" required>
-  
-    <label for="location">Lokacija objave</label>
-    <input id="location" formControlName="location" type="text" placeholder="Unesite adresu ili odaberite na mapi">
-    
-    <!-- Dodaj mapu ovde ako želiš opciju za interaktivni izbor lokacije -->
-  
-    <button type="submit">Postavi objavu</button>
+<form class="post-form" [formGroup]="postForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <h2>Nova objava</h2>
+
+  <div class="form-group">
+    <label for="description">Opis</label>
+    <input id="description" type="text" formControlName="description" required placeholder="Unesite opis..." />
+  </div>
+
+  <div class="form-group">
+    <label for="image">Izaberi sliku</label>
+    <input id="image" type="file" (change)="onFileSelected($event)" accept="image/*" />
+  </div>
+
+  <div class="form-group">
+    <label for="map">Izaberi lokaciju na mapi</label>
+    <div id="map"></div>
+  </div>
+
+  <button type="submit" [disabled]="postForm.invalid">📤 Postavi objavu</button>
+  <div *ngIf="successMessage" class="success-message">
+  ✅ {{ successMessage }}
+</div>
 </form>
+

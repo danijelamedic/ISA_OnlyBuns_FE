@@ -16,6 +16,9 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './admin/view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +32,8 @@ import { NgChartsModule } from 'ng2-charts';
     PostListComponent,
     ShowPostComponent,
     AdminComponent,
-    ViewUsersComponent
+    ViewUsersComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,8 @@ import { NgChartsModule } from 'ng2-charts';
     ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
     HttpClientModule,
     FormsModule,
-    NgChartsModule
+    NgChartsModule,    
+    LeafletModule
   ],
   providers: [],
   bootstrap: [AppComponent]
