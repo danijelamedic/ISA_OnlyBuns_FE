@@ -6,19 +6,20 @@ import { Comment } from './model/comment.model';
 import { User } from './model/user.model';
 import { UpdatePostDto } from './model/update-post.dto.model';
 import { Like } from './model/like.model';
+import { PostDto } from './model/post-dto.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  private apiUrl = 'http://localhost:8080/posts';
+  private apiUrl = 'http://localhost:8080/api/posts';
 
   constructor(private http: HttpClient) {}
 
-  createPost(postData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, postData);
-  }
+  createPost(formData: FormData) {
+  return this.http.post<PostDto>('http://localhost:8080/api/posts', formData);
+}
 
   showPost(): Observable<Post[]>{
     return this.http.get<Post[]>('http://localhost:8080/api/posts');
