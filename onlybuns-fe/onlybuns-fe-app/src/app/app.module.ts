@@ -14,7 +14,7 @@ import { PostListComponent } from './post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
-import { ViewUsersComponent } from './admin/view-users/view-users.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';

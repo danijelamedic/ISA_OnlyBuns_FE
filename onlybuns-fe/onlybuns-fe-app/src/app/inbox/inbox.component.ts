@@ -6,7 +6,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SocketService } from '../services/socket.service';
 import { environment } from 'src/environments/environment';
 import { Stomp } from '@stomp/stompjs';
-import { Observable, of, tap } from 'rxjs';
+import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { ChatCreate } from '../model/chat-create.model';
+import { UserService } from '../services/user.service';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-inbox',
@@ -21,10 +24,10 @@ export class InboxComponent implements OnInit {
   private stompClient: any;
   isLoaded: boolean = false;
 
-
   constructor(private inboxService: InboxService, 
               private fb: FormBuilder,
-              private socketService: SocketService) {
+              private socketService: SocketService,
+              private userService: UserService) {
     this.loginForm = this.fb.group({
       userId: ['']
     });
@@ -36,11 +39,14 @@ export class InboxComponent implements OnInit {
     chatKey: '',
     name: '',
     type: '',
-    receiverUsername: ''
+    receiverUsername: '',
+    adminId: 0
   }
 
-  selectedChatId?: number;
+  selectedChat?: Chat;
+  selectedChatKey: string ='';
   chatParticipants: number[] = [];
+  participants: User[] = [];
 
   messages: Message[] = [];
   myMessages: Message[] = [];
@@ -50,15 +56,34 @@ export class InboxComponent implements OnInit {
     senderId: 0,
     receiverIds: [],
     message: '',
-    dateTime: ''
+    dateTime: '',
+    chatKey: ''
   }
   newMessageText: string = '';
 
+  isNewGroupModalOpen = false;
+  newUserId: number | null = null;
+  participantsInput: string = '';
+
+  isNewChatModalOpen = false;
+  isParticipantsModalOpen = false;
+
+  newGroup = {
+    name: '',
+    participantIds: [] as number[],
+    type: 'GROUP',
+    adminId: 0
+  }
+
+  allUsers: User[] = [];
+  selectedUsers: User[] = [];
+  searchTerm: string = '';
 
   ngOnInit(): void {
     if(this.userId)
       this.getChatsByUser(this.userId);
     this.initializeWebSocketConnection();
+    this.getAllUsers();
   }
 
   getChatsByUser(id: number): void{
@@ -94,17 +119,15 @@ export class InboxComponent implements OnInit {
     });
   }
 
-  selectChat(id: number): void{
-    this.selectedChatId = id;
-    this.getMessagesByChat(this.selectedChatId);
+  selectChat(chat: Chat): void{
+    this.selectedChat = chat;
+    this.selectedChatKey = chat.chatKey;
+    this.getMessagesByChat(this.selectedChat.id);
     
-    this.setChatParticipants().subscribe(() => {
-      this.openSocket();
-    });
+    this.openSocket();
   }
 
-  getChatDisplayName(id?: number): string{
-    const chat = this.chats.find(c => c.id === id);
+  getChatDisplayName(chat: Chat): string{
     return chat?.name || chat?.receiverUsername || "chat";
   }
 
@@ -156,9 +179,9 @@ export class InboxComponent implements OnInit {
   }
 
   sendMessage() {
-    // this.setChatParticipants();
+    this.setChatParticipants();
     if (!this.newMessageText.trim()) return;
-    if (this.userId && this.chatParticipants) {
+    if (this.userId && this.chatParticipants && this.selectedChat) {
       //   recieverIds = rawToId.split(",")
       //                       .map((id: string) => Number(id.trim()))
       //                       .filter((id: number) => !isNaN(id));
@@ -167,15 +190,17 @@ export class InboxComponent implements OnInit {
         message: this.newMessageText,
         senderId: this.userId,
         receiverIds: this.chatParticipants,
-        chatId: 0, 
+        chatId: this.selectedChat.id, 
         dateTime: '',
-        id: this.selectedChatId || 0
+        id: 0,
+        chatKey: this.selectedChat.chatKey
       };
 
       console.log(message);
       this.socketService.postRest(message).subscribe(res => {
         console.log(res);
       })
+      this.newMessageText = '';
     }
   }
 
@@ -188,21 +213,12 @@ export class InboxComponent implements OnInit {
   }
 
   openSocket() {
-    if (this.isLoaded) {
-      // let recieverIds: number[] = [];
-
-      // if (this.userId) {
-      //   recieverIds = rawToId.split(",")
-      //                       .map((id: string) => Number(id.trim()))
-      //                       .filter((id: number) => !isNaN(id));
-      // }
-
-      if(this.userId)
-      this.stompClient.subscribe("/topic/chat." + this.generateChatKey(this.userId, this.chatParticipants), (message: { body: string; }) => {
+    if(this.isLoaded && this.userId && this.selectedChatKey){
+      const topic = "/topic/chat." + this.selectedChatKey;
+      this.stompClient.subscribe(topic, (message: { body: string; }) => {
         this.handleResult(message);
       });
-      if(this.userId)
-      console.log("chat key u open socketu: ", this.generateChatKey(this.userId, this.chatParticipants));
+      console.log("Subscribed to topic:", topic);
     }
   }
 
@@ -215,26 +231,167 @@ export class InboxComponent implements OnInit {
   }
 
   generateChatKey(senderId: number, receiverIds: number[]): string {
-  if (receiverIds.length === 1) {
-    const ids = [senderId, receiverIds[0]].sort((a, b) => a - b);
-    console.log("ChatKey:", ids.join('_'));
-    return ids.join('_');
-  } else {
-    console.log("ChatKey:", 'group_' + receiverIds.sort().join('_'));
-    return 'group_' + receiverIds.sort().join('_');
+    if (receiverIds.length === 1) {
+      const ids = [senderId, receiverIds[0]].sort((a, b) => a - b);
+      console.log("ChatKey:", ids.join('_'));
+      return ids.join('_');
+    } else {
+      console.log("ChatKey:", 'group_' + receiverIds.sort().join('_'));
+      return 'group_' + receiverIds.sort().join('_');
+    }
   }
-}
 
   setChatParticipants(): Observable<number[]> {
-  if (this.selectedChatId) {
-    return this.inboxService.getParticipantsByChatId(this.selectedChatId).pipe(
-      tap(response => {
-        this.chatParticipants = response.filter(item => item !== this.userId);
-        console.log("participants: ", this.chatParticipants);
-      })
-    );
+    if (this.selectedChat) {
+      return this.inboxService.getParticipantsByChatId(this.selectedChat.id).pipe(
+        tap(response => {
+          this.chatParticipants = response.filter(item => item !== this.userId);
+          console.log("participants: ", this.chatParticipants);
+        })
+      );
+    }
+    return of([]);
   }
-  return of([]);
-}
 
+  createGroup(chat: ChatCreate): void{
+    this.inboxService.createGroup(chat).subscribe({
+      next: (response) => {
+        const chat = response;
+        this.selectedChatKey = response.chatKey;
+        this.openSocket();
+        this.selectedChat = chat;
+        console.log("new chat: ", chat);
+      },
+      error: (err) => {
+        console.error('Error creating new chat', err);
+      }
+    })
+  }
+
+  openNewChatModal(): void{
+    this.isNewChatModalOpen = true;
+  }
+
+  openNewGroupModal(): void{
+    this.isNewGroupModalOpen = true;
+  }
+
+  closeNewGroupModal(): void{
+    this.isNewGroupModalOpen = false;
+    this.newGroup = {
+      name: '',
+      participantIds: [],
+      type: 'GROUP',
+      adminId: 0
+    };
+    this.participantsInput = '';
+  }
+
+  onSubmit(){
+    const ids = this.selectedUsers.map(user => user.id);
+
+    if(this.userId){
+      this.newGroup.adminId = this.userId;
+
+      if (!ids.includes(this.userId)) {
+        ids.push(this.userId);
+      }
+    }
+    this.newGroup.participantIds = ids;
+
+    this.createGroup(this.newGroup);
+    this.closeNewGroupModal();
+    window.location.reload();
+  }
+
+  getAllUsers(){
+    this.userService.getAllUsers().subscribe({
+      next : (response) => {
+        if(response){
+          this.allUsers = response;
+        }
+      },
+      error : (err) => {
+        console.error('Error fetching users');
+      }
+    })
+  }
+
+  selectUser(user: User){
+    if(!this.selectedUsers.find(u => u.id === user.id)){
+      this.selectedUsers.push(user);
+    }
+  }
+
+  removeUser(userId: number){
+    this.selectedUsers = this.selectedUsers.filter(u => u.id !== userId);
+  }
+
+  get filteredUsers(): User[] {
+    return this.allUsers
+      .filter(u => !this.selectedUsers.some(sel => sel.id === u.id))
+  }
+
+  openParticipantsModal(){
+    if(this.selectedChat){
+      if(this.selectedChat.name){
+        this.getUsersFromChatParticipants();
+        this.isParticipantsModalOpen = true;
+      }
+    }
+  }
+
+  getUsersFromChatParticipants(){
+    this.setChatParticipants().pipe(
+      switchMap((ids: number[]) => {
+        const request = ids.map(id => this.userService.getUserById(id));
+        return forkJoin(request);
+      })
+    ).subscribe({
+      next: (users: User[]) => {
+        this.participants = users;
+        console.log("korisnici: ", users);
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+      }
+    })
+  }
+
+
+  closeParticipantsModal(){
+    this.isParticipantsModalOpen = false;
+  }
+
+  removeUserFromGroup(id: number){
+    if(this.selectedChat && this.selectedChat.adminId && this.selectedChat.adminId == this.userId){
+      console.log("chat admin: ", this.selectedChat.adminId);
+      const confirmed = window.confirm('Are you sure you want to remove this user from group?');
+      if(confirmed && this.selectedChat){
+        this.participants = this.participants.filter(user => user.id !== id);
+        this.inboxService.removeUserFromChat(id, this.selectedChat.id).subscribe({
+          next: () => {
+            console.log(`User ${id} removed from group`);
+          },
+          error: (err) => {
+            console.error(`Error deleting user: `, err);
+          }
+        })
+      }
+    }
+    alert("You are not admin of this group");
+    
+  }
+
+
+  //TODO:
+  addUserToGroup(id: number){
+
+  }
+  //TODO:
+  getLast10Messages(){
+
+  }
+
+  
 }

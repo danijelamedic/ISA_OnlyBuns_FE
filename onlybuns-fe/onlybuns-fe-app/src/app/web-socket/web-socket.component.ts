@@ -66,7 +66,8 @@ export class SocketComponent implements OnInit {
         receiverIds: recieverIds,
         chatId: 0,
         dateTime: '',
-        id: 0
+        id: 0,
+        chatKey: ''
       };
 
       console.log(message);

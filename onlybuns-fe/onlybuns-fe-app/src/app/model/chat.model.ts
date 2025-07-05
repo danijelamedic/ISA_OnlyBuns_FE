@@ -3,5 +3,6 @@ export interface Chat{
     chatKey: string;
     name: string | null;
     type: string;
-    receiverUsername?: string;
+    receiverUsername?: string,
+    adminId?: number;
 }

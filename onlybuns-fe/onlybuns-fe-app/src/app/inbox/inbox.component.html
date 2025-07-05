@@ -8,16 +8,18 @@
 
 <div class="inbox-container" *ngIf="userId">
     <div class = "chat-list">
-        <div class="chat-box" *ngFor="let chat of chats" (click)="selectChat(chat.id)" [class.selected]="chat.id === selectedChatId">
+        <button (click)="openNewChatModal()">add group</button>
+        <button>add chat</button>
+
+        <div class="chat-box" *ngFor="let chat of chats" (click)="selectChat(chat)" [class.selected]="chat === selectedChat">
             {{chat.name || chat.receiverUsername || 'Nepoznat'}}
         </div>
     </div>
 
 
-
     <div class = "chat">
-        <div class="chat-receiver">
-            {{ getChatDisplayName(selectedChatId) }}
+        <div class="chat-receiver" *ngIf="selectedChat" (click)="openParticipantsModal()">
+            {{ getChatDisplayName(selectedChat) }}
         </div>
 
         <div class="messages" #scrollMe>
@@ -29,7 +31,54 @@
         </div>
 
         <div class="message-box">
-            <input type="text" placeholder="Napisi poruku..." [(ngModel)]="newMessageText" (keyup.enter)="sendMessage()" >
+            <input class="typeMessage" type="text" placeholder="Write message..." [(ngModel)]="newMessageText" (keyup.enter)="sendMessage()" >
+        </div>
+    </div>
+
+    <div class="modal-background" *ngIf="isNewGroupModalOpen">
+        <div class="modal">
+            <h2>Create group</h2>
+            <form (ngSubmit)="onSubmit()" #groupForm="ngForm">
+                <div class="formLabel">
+                    <label>Name: </label>
+                    <input [(ngModel)]="newGroup.name" name="name" required/>
+                </div>
+                
+                <div class="formLabel">
+                    <div class="selected-users">
+                    <span *ngFor="let user of selectedUsers" class="tag">
+                        {{ user.username }}
+                        <button (click)="removeUser(user.id)">x</button>
+                    </span>
+                    </div>
+
+                    <div class="user-dropdown">
+                    <div *ngFor="let user of filteredUsers" class="user-item" (click)="selectUser(user)">
+                        {{ user.username }}
+                    </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="submit" [disabled]="!groupForm.form.valid">Create</button>
+                    <button type="button" (click)="closeNewGroupModal()">Cancel</button>
+                </div>
+            </form>
+            
+        </div>
+
+    </div>
+
+    <div class="modal-background" *ngIf="isParticipantsModalOpen">
+        <div class="modal">
+            <div class="user-dropdown">
+                <div *ngFor="let user of participants" class="chatParticipants">
+                    <span class="username">{{ user.username }}</span>
+                    <button class="removeUser" (click)="removeUserFromGroup(user.id)">x</button>
+                </div>
+            </div>
+            <button class="closeButton" (click)="closeParticipantsModal()">Cancel</button>
         </div>
     </div>
 

@@ -3,6 +3,8 @@ import { Observable } from "rxjs";
 import { HttpClient } from '@angular/common/http';
 import { Chat } from '../model/chat.model';
 import { Message } from '../model/message';
+import { ChatCreate } from '../model/chat-create.model';
+import { User } from '../model/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +35,17 @@ export class InboxService {
 
     getParticipantsByChatId(id: number): Observable<number[]>{
         return this.http.get<number[]>(`http://localhost:8080/api/chats/getParticipants/${id}`);
+    }
+
+    createGroup(chat: ChatCreate): Observable<Chat>{
+        return this.http.post<Chat>(`http://localhost:8080/api/chats/group`, chat);
+    }
+
+    getChatKey(id: number): Observable<string>{
+        return this.http.get<string>(`http://localhost:8080/api/chats/getKeyById/${id}`);
+    }
+
+    removeUserFromChat(userId: number, chatId: number): Observable<void>{
+        return this.http.put<void>(`http://localhost:8080/api/chats/deleteUserFromChat/${userId}/${chatId}`, null);
     }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Role, User } from '../model/user.model';
-import { UserService } from '../admin/user.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
