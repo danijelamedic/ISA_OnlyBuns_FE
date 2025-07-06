@@ -12,7 +12,7 @@
     <div class="post-header">
       <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
       <button *ngIf="post.userId" (click)="followUser(post.userId)">Follow</button>
-      <p>{{ post.creationTime | date: 'short' }}</p>
+      <p>{{ post.creationTime | date: 'dd.MM.yyyy HH:mm' }}</p>
     </div>
     
     <p>{{ post.description }}</p>
@@ -28,27 +28,27 @@
       <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
       <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
       <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
-      <button (click)="toggleCommentForm()" class="button">Add comment</button>
+      <button (click)="toggleCommentForm(post.id)" class="button">Add comment</button>
       
     </div>
 
     <div *ngIf="post.isCommentsVisible" class="comments-section">
       <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
         <div class="comment-header">
-          <strong>{{ comment.userId }}</strong>
-          <span>{{ comment.timestamp | date: 'short' }}</span>
+          <strong>{{ comment.username }}</strong>
+            <span style="color: gray; font-size: 0.8em;"> {{ comment.creationTime | date:'dd.MM.yyyy HH:mm' }}</span>
+          <!--<span>{{ comment.creationTime | date: 'short' }}</span>-->
         </div>
         <p>{{ comment.content }}</p>
       </div>
     </div>
 
-
-    <!-- Forma za dodavanje komentara -->
-    <div *ngIf="isCommentFormVisible">
-      <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
+    <div *ngIf="commentFormVisibleForPostId === post.id">
+      <textarea [(ngModel)]="newCommentText" placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
       <br>
-      <button >Dodaj komentar</button>
+      <button (click)="addComment(post.id)">Dodaj komentar</button>
     </div>
+
   </div>
 </div>
 
@@ -58,7 +58,7 @@
   <div class="post" *ngFor="let post of postsByUser">
     <div class="post-header">
       <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
-      <p>{{ post.creationTime | date: 'short' }}</p>
+      <p>{{ post.creationTime | date: 'dd.MM.yyyy HH:mm' }}</p>
     </div>
     
     <p>{{ post.description }}</p>
@@ -106,7 +106,7 @@
     <div class="post-header">
       <h3>{{ usernames[post.id] || 'Loading...' }}</h3>
       <button (click)="unfollowUser(post.userId)">Unfollow</button>
-      <p>{{ post.creationTime | date: 'short' }}</p>
+      <p>{{ post.creationTime | date: 'dd.MM.yyyy HH:mm' }}</p>
     </div>
     
     <p>{{ post.description }}</p>
@@ -122,15 +122,15 @@
       <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
       <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
       <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
-      <button (click)="toggleCommentForm()" class="button">Add comment</button>
+      <button (click)="toggleCommentForm(post.id)" class="button">Add comment</button>
       
     </div>
 
     <div *ngIf="post.isCommentsVisible" class="comments-section">
       <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
         <div class="comment-header">
-          <strong>{{ comment.userId }}</strong>
-          <span>{{ comment.timestamp | date: 'short' }}</span>
+          <strong>{{ comment.postId }}</strong>
+          <span>{{ comment.creationTime | date: 'short' }}</span>
         </div>
         <p>{{ comment.content }}</p>
       </div>
@@ -138,10 +138,11 @@
 
 
     <!-- Forma za dodavanje komentara -->
-    <div *ngIf="isCommentFormVisible">
-      <textarea placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
+    <!-- Forma za dodavanje komentara -->
+    <div *ngIf="commentFormVisibleForPostId === post.id">
+      <textarea [(ngModel)]="newCommentText" placeholder="Unesite komentar..." rows="4" cols="50"></textarea>
       <br>
-      <button >Dodaj komentar</button>
+      <button (click)="addComment(post.id)">Dodaj komentar</button>
     </div>
   </div>
 </div>

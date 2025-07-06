@@ -33,8 +33,8 @@ export class PostService {
     return this.http.get<number>('http://localhost:8080/api/posts/getLikes/' + id);
   }
 
-  getComments(id: number): Observable<Comment[]>{
-    return this.http.get<Comment[]>('http://localhost:8080/api/posts/getComments/' + id);
+  getComments(postId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`http://localhost:8080/api/comment/post/${postId}`);
   }
 
   getUsername(id: number): Observable<User>{
@@ -61,4 +61,9 @@ export class PostService {
   getFollowingPosts(userId: number): Observable<Post[]>{
     return this.http.get<Post[]>('http://localhost:8080/api/posts/getFollowing/' + userId);
   }
+
+  addComment(comment: { postId: number; userId: number; content: string }): Observable<any> {
+  return this.http.post('http://localhost:8080/api/comment', comment);
+}
+
 }
