@@ -21,14 +21,14 @@ export class InboxService {
         return this.http.get(`http://localhost:8080/api/chats/getChatName/${id}`, {responseType: 'text'});
     }
 
-    getReceiverUsername(id: number): Observable<string>{
-        return this.http.get(`http://localhost:8080/api/chats/getReceiverUsername/${id}`, {responseType: 'text'});
+    getReceiverUsername(id: number, userId: number): Observable<string>{
+        return this.http.get(`http://localhost:8080/api/chats/getReceiverUsername/${id}/${userId}`, {responseType: 'text'});
     }
 
     getMessagesByChatId(id: number): Observable<Message[]>{
         return this.http.get<Message[]>(`http://localhost:8080/api/message/getByChatId/${id}`);
     }
-
+    
     getChatsByUser(id: number): Observable<Chat[]>{
         return this.http.get<Chat[]>(`http://localhost:8080/api/chats/getByUser/${id}`);
     }
@@ -47,5 +47,9 @@ export class InboxService {
 
     removeUserFromChat(userId: number, chatId: number): Observable<void>{
         return this.http.put<void>(`http://localhost:8080/api/chats/deleteUserFromChat/${userId}/${chatId}`, null);
+    }
+
+    addUserToChat(userId: number, chatId: number): Observable<void>{
+        return this.http.put<void>(`http://localhost:8080/api/chats/addUserToChat/${userId}/${chatId}`, null);
     }
 }

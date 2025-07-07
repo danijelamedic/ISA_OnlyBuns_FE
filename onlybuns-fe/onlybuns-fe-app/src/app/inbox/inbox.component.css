@@ -58,6 +58,7 @@
 .message {
   display: inline-block;
   width: fit-content;
+  max-width: 60%;
   padding: 10px 14px;
   margin: 6px 0;
   border-radius: 16px;
@@ -67,20 +68,36 @@
   border-radius: 15;
 }
 
-.message-left{
-  text-align: left;
-  align-self: flex-start;
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 6px 0;
+  width: 100%;
 }
 
-.message-right{
-    background-color: #0d6efd; 
-    color: white;
-    text-align: right;
-    align-self: flex-end;
+.message-wrapper.left {
+  align-items: flex-start;
+}
+
+.message-wrapper.right {
+  align-items: flex-end;
+}
+
+.username {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.message-wrapper.right .message {
+  background-color: #0d6efd;
+  color: white;
 }
 
 .typeMessage{
-  width: 1020px;
+  width: 100%;
   height: 50px;
   border: none;
   padding: 5px;

@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SocketService } from '../services/socket.service';
 import { environment } from 'src/environments/environment';
 import { Stomp } from '@stomp/stompjs';
-import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { ChatCreate } from '../model/chat-create.model';
 import { UserService } from '../services/user.service';
 import { User } from '../model/user.model';
@@ -79,6 +79,15 @@ export class InboxComponent implements OnInit {
   selectedUsers: User[] = [];
   searchTerm: string = '';
 
+  isAddUserOpened = false;
+
+  showUserModal = false;
+  selectedUser: User | null = null;
+
+  senderUsernames: { [userId: number]: string } = {};
+
+  chatName: string = '';
+
   ngOnInit(): void {
     if(this.userId)
       this.getChatsByUser(this.userId);
@@ -87,7 +96,6 @@ export class InboxComponent implements OnInit {
   }
 
   getChatsByUser(id: number): void{
-    
     this.inboxService.getChatsByUser(id).subscribe({
       next: (response) => {
         if(Array.isArray(response)){
@@ -99,10 +107,13 @@ export class InboxComponent implements OnInit {
                 chat.name = name;
               }
               else{
-                this.inboxService.getReceiverUsername(chat.id).subscribe(username => {
-                  chat.receiverUsername = username;
-                  console.log("Postavljen receiverUsername:", chat.receiverUsername);
-                });
+                if(this.userId){
+                  this.inboxService.getReceiverUsername(chat.id, this.userId).subscribe(username => {
+                    chat.receiverUsername = username;
+                    console.log("Postavljen receiverUsername:", chat.receiverUsername);
+                  });
+                }
+                
               }
             });
           });
@@ -135,16 +146,31 @@ export class InboxComponent implements OnInit {
     this.inboxService.getMessagesByChatId(id).subscribe({
       next: (response) => {
         this.messages = response;
-        console.log("messages: ", this.messages);
-        setTimeout(() => {
-        this.scrollToBottom();
-      }, 0);
-        
+
+        this.inboxService.getChatName(id).subscribe({
+          next: (chatNameResponse) => {
+            this.chatName = chatNameResponse;
+            console.log("chat name:", this.chatName);
+
+            if(this.chatName){
+              this.loadSenderUsernames(this.messages);
+            }
+
+            console.log("messages: ", this.messages);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 0);
+          },
+          error: (err) => {
+            console.log("error fetching chat name: ", err);
+          }
+        });
       },
       error: (err) => {
         console.error('Error fetching messages', err);
       }
     })
+
   }
 
   setUserId(id: number): void{
@@ -182,15 +208,10 @@ export class InboxComponent implements OnInit {
     this.setChatParticipants();
     if (!this.newMessageText.trim()) return;
     if (this.userId && this.chatParticipants && this.selectedChat) {
-      //   recieverIds = rawToId.split(",")
-      //                       .map((id: string) => Number(id.trim()))
-      //                       .filter((id: number) => !isNaN(id));
-      // }
       let message: Message = {
         message: this.newMessageText,
         senderId: this.userId,
         receiverIds: this.chatParticipants,
-        chatId: this.selectedChat.id, 
         dateTime: '',
         id: 0,
         chatKey: this.selectedChat.chatKey
@@ -199,8 +220,20 @@ export class InboxComponent implements OnInit {
       console.log(message);
       this.socketService.postRest(message).subscribe(res => {
         console.log(res);
+
+        if (this.selectedChat && !this.selectedChat.id && res && res.chatId) {
+          this.selectedChat.id = res.chatId;
+          const exists = this.chats.some(chat => chat.id === res.id);
+          if (!exists) {
+            this.chats.push(this.selectedChat);
+          }
+        }
+
       })
       this.newMessageText = '';
+      
+
+
     }
   }
 
@@ -230,15 +263,10 @@ export class InboxComponent implements OnInit {
     }
   }
 
-  generateChatKey(senderId: number, receiverIds: number[]): string {
-    if (receiverIds.length === 1) {
-      const ids = [senderId, receiverIds[0]].sort((a, b) => a - b);
+  generateChatKey(senderId: number, receiverId: number): string {
+      const ids = [senderId, receiverId].sort((a, b) => a - b);
       console.log("ChatKey:", ids.join('_'));
       return ids.join('_');
-    } else {
-      console.log("ChatKey:", 'group_' + receiverIds.sort().join('_'));
-      return 'group_' + receiverIds.sort().join('_');
-    }
   }
 
   setChatParticipants(): Observable<number[]> {
@@ -269,7 +297,7 @@ export class InboxComponent implements OnInit {
   }
 
   openNewChatModal(): void{
-    this.isNewChatModalOpen = true;
+    this.isNewGroupModalOpen = true;
   }
 
   openNewGroupModal(): void{
@@ -332,6 +360,11 @@ export class InboxComponent implements OnInit {
       .filter(u => !this.selectedUsers.some(sel => sel.id === u.id))
   }
 
+  get suggestedUsers(): User[] {
+    return this.allUsers
+      .filter(u => !this.chatParticipants.some(sel => sel === u.id))
+  }
+
   openParticipantsModal(){
     if(this.selectedChat){
       if(this.selectedChat.name){
@@ -361,6 +394,7 @@ export class InboxComponent implements OnInit {
 
   closeParticipantsModal(){
     this.isParticipantsModalOpen = false;
+    this.closeAddUserPart();
   }
 
   removeUserFromGroup(id: number){
@@ -383,15 +417,78 @@ export class InboxComponent implements OnInit {
     
   }
 
+  addUser(){
+    this.isAddUserOpened = true;
+  }
 
-  //TODO:
+  closeAddUserPart(){
+    this.isAddUserOpened = false;
+  }
+
   addUserToGroup(id: number){
-
+    this.setChatParticipants();
+    if(this.selectedChat && this.selectedChat.adminId && this.selectedChat.adminId == this.userId){
+      console.log("chat admin: ", this.selectedChat.adminId);
+      if(this.selectedChat){
+        this.userService.getUserById(id).subscribe(user => {
+          this.participants.push(user);
+        });
+        this.inboxService.addUserToChat(id, this.selectedChat.id).subscribe({
+          next: () => {
+            console.log(`User ${id} added to group`);
+          },
+          error: (err) => {
+            console.error(`Error adding user: `, err);
+          }
+        })
+      }
+    }
+    else{
+      alert("You are not admin of this group");
+    }
   }
-  //TODO:
-  getLast10Messages(){
 
+  openNewPrivateChatModal() {
+    this.showUserModal = true;
+    console.log('Modal opened');
   }
 
+  closeUserModal() {
+    this.showUserModal = false;
+  }
+
+  openChat(receiverId: number) {
+    this.closeUserModal();
+
+    const receiver = this.allUsers.find(u => u.id === receiverId);
+    if (!receiver) return;
+
+    this.selectedUser = receiver;
+
+    if(this.userId){
+      this.selectedChatKey = this.generateChatKey(this.userId, receiverId);
+      this.openSocket();
+    }
+
+
+    this.selectedChat = {
+      id: 0,
+      chatKey: this.selectedChatKey,
+      receiverUsername: receiver.username,
+      name: null,
+      type: 'PRIVATE'
+    };
+
+    this.messages = [];
+  }
+
+  loadSenderUsernames(messages: Message[]) {
+    const uniqueSenderIds = [...new Set(messages.map(m => m.senderId))];
+    uniqueSenderIds.forEach(id => {
+      this.userService.getUserById(id).subscribe(user => {
+        this.senderUsernames[id] = user.username;
+      });
+    });
+  }
   
 }
