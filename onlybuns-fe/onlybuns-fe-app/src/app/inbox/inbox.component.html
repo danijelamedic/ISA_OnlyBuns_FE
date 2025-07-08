@@ -8,8 +8,8 @@
 
 <div class="inbox-container" *ngIf="userId">
     <div class = "chat-list">
-        <button (click)="openNewChatModal()">add group</button>
-        <button (click)="openNewPrivateChatModal()">add chat</button>
+        <button (click)="openNewChatModal()" class="button">add group</button>
+        <button (click)="openNewPrivateChatModal()" class="button">add chat</button>
 
         <div class="chat-box" *ngFor="let chat of chats" (click)="selectChat(chat)" [class.selected]="chat === selectedChat">
             {{chat.name || chat.receiverUsername || 'Nepoznat'}}
@@ -23,14 +23,22 @@
         </div>
 
         <div class="messages" #scrollMe>
-           <div *ngFor="let message of messages" [ngClass]="{'left': message.senderId !== userId, 'right': message.senderId === userId}" class="message-wrapper" >
-                <div *ngIf="selectedChat?.type === 'GROUP'" class="username">
-                    {{ senderUsernames[message.senderId] }}
-                </div>
-                <div class="message">
-                    {{message.message}}
-                </div>
+           <div *ngFor="let message of messages; let i = index">
+                <div *ngIf="shouldShowDate(i)" class="separator">
+                    <div class="date-separator">{{ message.dateTime | date: 'dd.MM.yyyy.' }}</div>
+                </div>    
 
+            <div class="message-wrapper"  [ngClass]="{'left': message.senderId !== userId, 'right': message.senderId === userId}">
+                <div *ngIf="selectedChat?.type === 'GROUP'" class="username">
+                        {{ senderUsernames[message.senderId] }}
+                    </div>
+                    <div class="message">
+                        {{message.message}}
+                    </div>
+                    <p class="timestamp">{{ message.dateTime | date: 'HH:mm' }}</p>
+                
+
+                </div>
             </div>
         </div>
 
@@ -65,8 +73,8 @@
                 </div>
 
                 <div class="modal-buttons">
-                    <button type="submit" [disabled]="!groupForm.form.valid">Create</button>
-                    <button type="button" (click)="closeNewGroupModal()">Cancel</button>
+                    <button class="button" type="submit" [disabled]="!groupForm.form.valid">Create</button>
+                    <button class="button" type="button" (click)="closeNewGroupModal()">Cancel</button>
                 </div>
             </form>
             
@@ -76,21 +84,21 @@
 
     <div class="modal-background" *ngIf="isParticipantsModalOpen">
         <div class="modal">
-            <button class="closeButton" (click)="closeParticipantsModal()">Close</button>
+            <button class="button" (click)="closeParticipantsModal()">Close</button>
             <div class="user-dropdown">
                 <div *ngFor="let user of participants" class="chatParticipants">
-                    <span class="username">{{ user.username }}</span>
+                    <span>{{ user.username }}</span>
                     <button class="removeUser" (click)="removeUserFromGroup(user.id)">x</button>
                 </div>
             </div>
-            <button (click)="addUser()">Add user</button>
+            <button class="button" (click)="addUser()">Add user</button>
             <div class="formLabel" *ngIf="isAddUserOpened">
                 <div class="user-dropdown">
                     <div *ngFor="let user of suggestedUsers" class="user-item" (click)="addUserToGroup(user.id)">
                         {{ user.username }}
                     </div>
                 </div>
-                <button (click)="closeAddUserPart()">Done</button>
+                <button class="button" (click)="closeAddUserPart()">Done</button>
             </div>
         </div>
     </div>
@@ -104,7 +112,7 @@
                         {{ user.username }}
                     </div>
                 </div>
-                <button (click)="closeUserModal()">Cancel</button>
+                <button class="button" (click)="closeUserModal()">Cancel</button>
             </div>
         </div>
     </div>

@@ -145,7 +145,10 @@ export class InboxComponent implements OnInit {
   getMessagesByChat(id: number): void{
     this.inboxService.getMessagesByChatId(id).subscribe({
       next: (response) => {
+
         this.messages = response;
+        this.messages.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+
 
         this.inboxService.getChatName(id).subscribe({
           next: (chatNameResponse) => {
@@ -413,7 +416,9 @@ export class InboxComponent implements OnInit {
         })
       }
     }
-    alert("You are not admin of this group");
+    else if(this.selectedChat && this.selectedChat.adminId && this.selectedChat.adminId != this.userId){
+      alert("You are not admin of this group");
+    }
     
   }
 
@@ -490,5 +495,15 @@ export class InboxComponent implements OnInit {
       });
     });
   }
+
+  shouldShowDate(index: number): boolean {
+  if (index === 0) return true;
+
+  const current = new Date(this.messages[index].dateTime);
+  const previous = new Date(this.messages[index - 1].dateTime);
+
+  return current.toDateString() !== previous.toDateString();
+}
+
   
 }
