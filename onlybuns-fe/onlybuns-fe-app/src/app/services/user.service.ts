@@ -99,4 +99,8 @@ export class UserService {
   getHaveNotAny(): Observable<number>{
     return this.http.get<number>('http://localhost:8080/api/admin/getHaveNotAny');
   }
+
+  getAllUsers(): Observable<User[]>{
+    return this.http.get<User[]>(`http://localhost:8080/api/users/getAll`);
+  }
 }

@@ -5,7 +5,7 @@ import { PostService } from '../post.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdatePostDto } from '../model/update-post.dto.model';
 import { User } from '../model/user.model';
-import { UserService } from '../admin/user.service';
+import { UserService } from '../services/user.service';
 import { Follower } from '../model/follower.mode';
 
 @Component({

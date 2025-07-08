@@ -14,11 +14,13 @@ import { PostListComponent } from './post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
-import { ViewUsersComponent } from './admin/view-users/view-users.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
+import { SocketComponent } from './web-socket/web-socket.component';
+import { InboxComponent } from './inbox/inbox.component';
 
 @NgModule({
   declarations: [
@@ -33,16 +35,18 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     ShowPostComponent,
     AdminComponent,
     ViewUsersComponent,
-    NavbarComponent
+    NavbarComponent,
+    SocketComponent,
+    InboxComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule, // Dodaj ovde ReactiveFormsModule
+    ReactiveFormsModule, 
     HttpClientModule,
     FormsModule,
     NgChartsModule,    
-    LeafletModule
+    LeafletModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
