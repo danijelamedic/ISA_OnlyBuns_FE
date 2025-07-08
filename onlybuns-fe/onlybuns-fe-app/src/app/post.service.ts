@@ -6,19 +6,20 @@ import { Comment } from './model/comment.model';
 import { User } from './model/user.model';
 import { UpdatePostDto } from './model/update-post.dto.model';
 import { Like } from './model/like.model';
+import { PostDto } from './model/post-dto.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  private apiUrl = 'http://localhost:8080/posts';
+  private apiUrl = 'http://localhost:8080/api/posts';
 
   constructor(private http: HttpClient) {}
 
-  createPost(postData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, postData);
-  }
+  createPost(formData: FormData) {
+  return this.http.post<PostDto>('http://localhost:8080/api/posts', formData);
+}
 
   showPost(): Observable<Post[]>{
     return this.http.get<Post[]>('http://localhost:8080/api/posts');
@@ -32,8 +33,8 @@ export class PostService {
     return this.http.get<number>('http://localhost:8080/api/posts/getLikes/' + id);
   }
 
-  getComments(id: number): Observable<Comment[]>{
-    return this.http.get<Comment[]>('http://localhost:8080/api/posts/getComments/' + id);
+  getComments(postId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`http://localhost:8080/api/comment/post/${postId}`);
   }
 
   getUsername(id: number): Observable<User>{
@@ -60,4 +61,9 @@ export class PostService {
   getFollowingPosts(userId: number): Observable<Post[]>{
     return this.http.get<Post[]>('http://localhost:8080/api/posts/getFollowing/' + userId);
   }
+
+  addComment(comment: { postId: number; userId: number; content: string }): Observable<any> {
+  return this.http.post('http://localhost:8080/api/comment', comment);
+}
+
 }

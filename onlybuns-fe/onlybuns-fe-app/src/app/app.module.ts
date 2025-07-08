@@ -16,9 +16,11 @@ import { ShowPostComponent } from './show-post/show-post.component';
 import { AdminComponent } from './admin/admin.component';
 import { ViewUsersComponent } from './view-users/view-users.component';
 import { NgChartsModule } from 'ng2-charts';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';
-import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -33,9 +35,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     ShowPostComponent,
     AdminComponent,
     ViewUsersComponent,
+    NavbarComponent,
     SocketComponent,
-    InboxComponent,
-    NavbarComponent
+    InboxComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     ReactiveFormsModule, 
     HttpClientModule,
     FormsModule,
-    NgChartsModule
+    NgChartsModule,    
+    LeafletModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

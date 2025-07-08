@@ -19,7 +19,8 @@ export class ShowPostComponent {
   likesNum: { [key: number]: number } = {};
   defaultUserId: number = 1;
   commentsForPost: { [key: number]: Comment[] } = {};
-  isCommentsVisible: boolean = false;
+  //isCommentsVisible: boolean = false;
+  commentFormVisibleForPostId: number | null = null;
   userId: number = 1;
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
@@ -102,20 +103,25 @@ export class ShowPostComponent {
     })
   }
 
-  loadComments(postId: number): void{
-    this.postService.getComments(postId).subscribe({
-      next: (comments: Comment[]) => {
-        this.commentsForPost[postId] = comments;
-        const post = this.posts.find(p => p.id === postId);
-        if (post) {
-          post.isCommentsVisible = true;
-        }
-      },
-      error: (error: any) => {
-        console.error('Error loading comments:', error);
+  loadComments(postId: number): void {
+  this.postService.getComments(postId).subscribe({
+    next: (comments: Comment[]) => {
+      // Sortiraj komentare od najnovijih ka najstarijima
+      this.commentsForPost[postId] = comments.sort((a, b) => 
+        new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime()
+      );
+
+      const post = this.posts.find(p => p.id === postId);
+      if (post) {
+        post.isCommentsVisible = true;
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error loading comments:', error);
+    }
+  });
+}
+
 
   closeComments(postId: number): void {
     const post = this.posts.find(p => p.id === postId);
@@ -137,19 +143,41 @@ export class ShowPostComponent {
     }
   }
 
-  toggleCommentForm(): void {
-    this.isCommentFormVisible = !this.isCommentFormVisible;
+  toggleCommentForm(postId: number): void {
+  if (this.commentFormVisibleForPostId === postId) {
+    this.commentFormVisibleForPostId = null; // zatvori ako je već otvoreno
+  } else {
+    this.commentFormVisibleForPostId = postId; // otvori samo za taj post
+  }
+}
+
+
+  addComment(postId: number): void {
+  if (!this.newCommentText.trim()) {
+    console.warn('Komentar ne može biti prazan');
+    return;
   }
 
-  addComment(): void {
-    if (this.newCommentText.trim()) {
-      console.log('Komentar:', this.newCommentText);
+  const commentPayload = {
+    postId: postId,
+    userId: this.userId,
+    content: this.newCommentText
+  };
+
+  this.postService.addComment(commentPayload).subscribe({
+    next: (response) => {
+      console.log('Komentar dodat:', response);
       this.newCommentText = '';
-      this.isCommentFormVisible = false;
-    } else {
-      console.warn('Komentar ne može biti prazan');
+      this.loadComments(postId); // osveži komentare za taj post
+      this.commentFormVisibleForPostId = null; // zatvori formu za unos komentara
+    },
+    error: (error) => {
+      console.error('Greška pri dodavanju komentara:', error);
+      alert('Došlo je do greške pri dodavanju komentara.');
     }
-  }
+  });
+}
+
 
   getPostsByUserId(userId: number): void{
     this.postService.getPostsByUser(userId).subscribe({
