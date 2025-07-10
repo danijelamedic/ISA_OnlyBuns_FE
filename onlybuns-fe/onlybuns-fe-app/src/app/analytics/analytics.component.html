@@ -1,6 +1,18 @@
-<h1 class="title">Application analytics</h1>
+<div class="admin-home">
+  <div class="panel">
+    <h1 class="admin-panel">Admin Panel</h1>
+    
+    <ul class="nav-links">
+      <li><a routerLink="/show-posts">All users posts</a></li>
+      <li><a routerLink="/trends">Trends</a></li>
+      <li><a routerLink="/">Registered users</a></li>
+    </ul>
+  </div>
 
-<div class="analytics">
+  <div class="analytics-right">
+  <h1 class="admin-panel">Application analytics</h1>
+
+  <div class="analytics">
     <div class="comment-analytics">
         <h1>Comment analytics for:</h1>
       
@@ -89,36 +101,39 @@
           <p *ngIf="postResult !== undefined" [ngClass]="{'large-text': postResult !== undefined}">{{ postResult }}</p>
           <p *ngIf="postResult === undefined" class="nodata">No data available.</p>
         </div>
-      </div>
-</div>
-
-
-<div class="charts">
-  <div style="display: block; width: 25%;" *ngIf="postChartData">
-    <div class="chart-title">Users with posts</div> 
-    <canvas baseChart
-            [data]="postChartData"
-            [type]="chartType"
-            [options]="chartOptions">
-    </canvas>
+    </div>
   </div>
 
-  <div style="display: block; width: 25%;" *ngIf="commentChartData">
-    <div class="chart-title">Users with comments</div> 
-    <canvas baseChart
-            [data]="commentChartData"
-            [type]="chartType"
-            [options]="chartOptions">
-    </canvas>
+
+  <div class="charts">
+    <div style="display: block; width: 25%;" *ngIf="postChartData">
+      <div class="chart-title">Users with posts</div> 
+      <canvas baseChart
+              [data]="postChartData"
+              [type]="chartType"
+              [options]="chartOptions">
+      </canvas>
+    </div>
+
+    <div style="display: block; width: 25%;" *ngIf="commentChartData">
+      <div class="chart-title">Users with comments</div> 
+      <canvas baseChart
+              [data]="commentChartData"
+              [type]="chartType"
+              [options]="chartOptions">
+      </canvas>
+    </div>
+
+    <div style="display: block; width: 25%;" *ngIf="nothingChartData">
+      <div class="chart-title">Users withouth both</div> 
+      <canvas baseChart
+              [data]="nothingChartData"
+              [type]="chartType"
+              [options]="chartOptions">
+      </canvas>
+    </div>
+    
+  </div>
   </div>
 
-  <div style="display: block; width: 25%;" *ngIf="nothingChartData">
-    <div class="chart-title">Users withouth both</div> 
-    <canvas baseChart
-            [data]="nothingChartData"
-            [type]="chartType"
-            [options]="chartOptions">
-    </canvas>
-  </div>
-  
 </div>

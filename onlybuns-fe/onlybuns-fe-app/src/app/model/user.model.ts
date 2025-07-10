@@ -6,6 +6,7 @@ export interface User{
     email: string;
     postsNum: number;
     role: Role;
+    followerNum: number;
 }
 
 export enum Role{
