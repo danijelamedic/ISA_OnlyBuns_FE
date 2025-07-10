@@ -27,8 +27,8 @@ export class UserService {
     return this.http.get<User[]>(`http://localhost:8080/api/admin/findBySurname/` + surname);
   }
 
-  findByEmail(email: string): Observable<User> {
-    return this.http.get<User>(`http://localhost:8080/api/admin/findByEmail/` + email);
+  findByEmail(email: string): Observable<User[]> {
+    return this.http.get<User[]>(`http://localhost:8080/api/admin/findByEmail/` + email);
   }
 
   findByPostsNumber(min: number, max: number): Observable<User[]> {
@@ -36,8 +36,11 @@ export class UserService {
     return this.http.get<User[]>(`http://localhost:8080/api/admin/findByPostsNumber`, { params });
   }
 
-  sortByEmail(): Observable<User[]> {
-    return this.http.get<User[]>(`http://localhost:8080/api/admin/sortByEmail`);
+  sortByEmail(page: number, size: number): Observable<PaginatedResponse> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PaginatedResponse>(`http://localhost:8080/api/admin/sortByEmail`, {params});
   }
 
   getTotalUsersCount(): Observable<number> {

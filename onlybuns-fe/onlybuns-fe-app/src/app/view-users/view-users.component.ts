@@ -26,7 +26,8 @@ export class ViewUsersComponent implements OnInit{
     surname: '',
     email: '',
     postsNum: 0,
-    role: Role.REGISTERED_USER
+    role: Role.REGISTERED_USER,
+    followerNum: 0
   };
 
   constructor(private userService: UserService){}
@@ -77,10 +78,11 @@ export class ViewUsersComponent implements OnInit{
   }
 
   searchByEmail(email: string): void {
+    console.log("ZOVEM JE ODAVDE");
     if (email) {
       this.userService.findByEmail(email).subscribe({
-        next: (data: User) => {
-          this.user = data;
+        next: (data: User[]) => {
+          this.users = data;
         },
         error: (err) => {
           console.error('Error searching users by email', err);
@@ -104,14 +106,15 @@ export class ViewUsersComponent implements OnInit{
   }
 
   sortByMail(): void {
-    this.userService.sortByEmail().subscribe({
-      next: (data: User[]) => {
-        this.users = data;
-      },
-      error: (err) => {
-        console.error('Error sorting users by email', err);
-      }
-    });
+    console.log("POZIVAM SE OVDE");
+    // this.userService.sortByEmail().subscribe({
+    //   next: (data: User[]) => {
+    //     this.users = data;
+    //   },
+    //   error: (err) => {
+    //     console.error('Error sorting users by email', err);
+    //   }
+    // });
   }
 
   resetFilters(): void {

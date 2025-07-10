@@ -8,13 +8,11 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
   styleUrls: ['./analytics.component.css']
 })
 export class AnalyticsComponent {
-  // Comment Analytics
   week: string | undefined;
   month: string | undefined;
   year: number | undefined;
   result: number | undefined;
 
-  // Post Analytics
   postWeek: string | undefined;
   postMonth: string | undefined;
   postYear: number | undefined;
@@ -30,8 +28,9 @@ export class AnalyticsComponent {
   public postChartData: ChartData<'doughnut', number[]> | undefined;
   public commentChartData: ChartData<'doughnut', number[]> | undefined;
   public nothingChartData: ChartData<'doughnut', number[]> | undefined;
-  public chartType: ChartType = 'doughnut'; // Tip grafikona (npr. 'pie', 'doughnut', 'bar')
+  public chartType: ChartType = 'doughnut'; 
   public chartOptions: ChartOptions = {
+  
     responsive: true,
     plugins: {
       legend: {
@@ -60,7 +59,7 @@ export class AnalyticsComponent {
     switch (this.mode) {
       case 'week':
         if (this.week) {
-          const [year, week] = this.week.split('-W').map(Number); // parsira godinu i nedelju
+          const [year, week] = this.week.split('-W').map(Number);
           if (year && week) {
             this.getCommentsPerWeek(week, year);
           }
@@ -244,7 +243,7 @@ export class AnalyticsComponent {
     this.postChartData = {
       datasets: [{
         data: [this.postPercent ?? 0, 100 - (this.postPercent ?? 0)],
-        backgroundColor: ['#45a049', '#D3D3D3'],
+        backgroundColor: ['#9db4c0', '#D3D3D3'],
       }]
     };
   }
@@ -253,7 +252,7 @@ export class AnalyticsComponent {
     this.commentChartData = {
       datasets: [{
         data: [this.commentPercent ?? 0, 100 - (this.commentPercent ?? 0)],
-        backgroundColor: ['#45a049', '#D3D3D3'],
+        backgroundColor: ['#9db4c0', '#D3D3D3'],
       }]
     };
   }
@@ -262,11 +261,9 @@ export class AnalyticsComponent {
     this.nothingChartData = {
       datasets: [{
         data: [this.nothingPercent ?? 0, 100 - (this.nothingPercent ?? 0)],
-        backgroundColor: ['#45a049', '#D3D3D3'],
+        backgroundColor: ['#9db4c0', '#D3D3D3'],
       }]
     };
   }
-
-  // public chartLabels: string[] = ['Category A', 'Category B', 'Category C'];
   
 }
