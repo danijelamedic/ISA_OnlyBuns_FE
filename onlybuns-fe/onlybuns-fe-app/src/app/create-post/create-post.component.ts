@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { latLng, tileLayer, Map, marker, Marker, LeafletMouseEvent } from 'leaflet';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { LocationService } from '../location.service';
 import { icon } from 'leaflet';
 

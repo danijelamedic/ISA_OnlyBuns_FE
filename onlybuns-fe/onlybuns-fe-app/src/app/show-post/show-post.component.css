@@ -1,275 +1,260 @@
-/* Container for each post */
 .post {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 16px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
   
-/* Header with user info and post time */
 .post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
   
 .post-header h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
 }
   
 .post-header p {
-    font-size: 14px;
-    color: #666;
-    margin: 0;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
 }
   
-/* Description area */
 .post-description {
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: #333;
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #333;
 }
   
-/* Image area */
 .post-image img {
-    width: 100%;
-    height: auto;      /* Održava proporcije slike */
-    object-fit: contain; /* Održava originalne dimenzije slike u okviru */
-    border-radius: 4px;
-    margin-bottom: 12px;
+  width: 100%;
+  height: auto; 
+  object-fit: contain;
+  border-radius: 4px;
+  margin-bottom: 12px;
 }
   
-/* Footer with Like button */
 .post-footer {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .post-footer p {
-    margin-bottom: 15px; /* Razmak između teksta i dugmeta */
-    margin-right: 30px;
+  margin-bottom: 15px; 
+  margin-right: 30px;
 }
   
 .like-button {
-background-color: red; /* Crvena boja pozadine dugmeta */
-color: white;  /* Bele slova na dugmetu */
-border: none;  /* Ukloni ivicu dugmeta */
-border-radius: 25px; /* Ovalne ivice dugmeta */
-padding: 10px 20px; /* Povećaj unutrašnju marginu da bi dugme bilo veće */
-font-size: 16px; /* Veličina fonta za tekst na dugmetu */
-cursor: pointer; /* Dodaj pokazivač kursora kada je dugme iznad */
-transition: background-color 0.3s ease; /* Dodaj animaciju pri promeni boje */
-margin-right: 15px;
+  background-color: red;
+  color: white; 
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px; 
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 15px;
 }
 
-.like-button:hover {
-background-color: darkred; /* Tamnija crvena boja kad se pređe mišem preko dugmeta */
+.like-button:hover { 
+  background-color: darkred; 
 }
 
-/* Glavni kontejner za komentare */
 .comments-section {
-    margin-top: 20px; /* Razmak između posta i komentara */
-    padding: 10px;
-    border-top: 1px solid #ccc; /* Linija koja razdvaja post i komentare */
-    background-color: #f9f9f9; /* Pozadinska boja za sekciju komentara */
-  }
-  
-  /* Box za svaki komentar */
-  .comment-box {
-    background-color: #fff;
-    border: 1px solid #ddd; /* Sivi okvir oko svakog komentara */
-    border-radius: 8px; /* Zaobljeni ivici */
-    padding: 15px;
-    margin-bottom: 10px; /* Razmak između komentara */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Blagi senka */
-  }
-  
-  /* Header svakog komentara (korisničko ime i vreme) */
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px; /* Razmak ispod headera */
-  }
-  
-  .comment-header strong {
-    font-size: 16px; /* Veće korisničko ime */
-    color: #333; /* Boja korisničkog imena */
-  }
-  
-  .comment-header span {
-    font-size: 12px; /* Manji font za datum */
-    color: #777; /* Siva boja za datum */
-  }
-  
-  /* Tekst samog komentara */
-  .comment-box p {
-    font-size: 14px;
-    color: #555; /* Siva boja za tekst komentara */
-    line-height: 1.5; /* Prostor između redova */
-  }
-  
-  /* Hover efekat kada se prelazi mišem preko komentara */
-  .comment-box:hover {
-    background-color: #f1f1f1; /* Svetlija boja kada se pređe mišem */
-    cursor: pointer; /* Kursor u obliku ruke */
-  }
-  
-  /* Dodavanje margine na dnu sekcije komentara */
-  .comments-section .comment-box:last-child {
-    margin-bottom: 0;
-  }
-  
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
 
-.button {
-background-color: gray; /* Crvena boja pozadine dugmeta */
-color: white;  /* Bele slova na dugmetu */
-border: none;  /* Ukloni ivicu dugmeta */
-border-radius: 25px; /* Ovalne ivice dugmeta */
-padding: 10px 20px; /* Povećaj unutrašnju marginu da bi dugme bilo veće */
-font-size: 16px; /* Veličina fonta za tekst na dugmetu */
-cursor: pointer; /* Dodaj pokazivač kursora kada je dugme iznad */
-transition: background-color 0.3s ease; /* Dodaj animaciju pri promeni boje */
-margin-right: 15px;
+.comment-box {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-header strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.comment-header span {
+  font-size: 12px;
+  color: #777;
+}
+
+.comment-box p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.comment-box:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.comments-section .comment-box:last-child {
+  margin-bottom: 0;
+}
+
+.button{
+border-radius: 15px;
+background-color: #9db4c0;
+padding: 10px;
+font-size: 15px;
+border: none;
+margin: 6px;
+color: white;
+width: auto;
+transition: background-color 0.3s ease;
 }
 
 .button:hover {
-background-color: darkgray; /* Tamnija crvena boja kad se pređe mišem preko dugmeta */
+background-color: #5c6b73;
 }
 
 .comment-form {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    width: 100%;
-    max-width: 600px;
-    margin: 16px auto;
-  }
-  
-  .comment-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    resize: vertical;  /* Omogućava vertikalno skaliranje */
-  }
-  
-  .comment-form button {
-    background-color: green;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .comment-form button:hover {
-    background-color: darkgreen;
-  }
-  
-  .comment-form textarea:focus {
-    outline-color: #66b3ff;
-  }
-  
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+}
 
-  .tabs {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  .tabs button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .tabs button.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .post {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-  }
-  
-  .post h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+.comment-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  resize: vertical; 
+}
+
+.comment-form button {
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.comment-form button:hover {
+  background-color: darkgreen;
+}
+
+.comment-form textarea:focus {
+  outline-color: #66b3ff;
+}
 
 
-  .tabs {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  .tabs button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .tabs button.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .post {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-  }
-  
-  .post h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background-color: #9db4c0;
+  padding: 10px;
+  font-size: 15px;
+  border: none;
+  margin: 6px;
+  color: white;
+}
+
+.tabs button.active {
+  background-color: #5c6b73;
+  color: white;
+}
+
+.post {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.post h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.post {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.post h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
   
 
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
   
-  .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-  }
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
+
+.image-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-top: 10px;
+}
   
-  .image-preview {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-top: 10px;
-  }
-  
+.updateForm{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.updateTitle{
+  color: #9db4c0;
+}
