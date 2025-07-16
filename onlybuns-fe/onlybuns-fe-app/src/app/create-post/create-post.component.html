@@ -15,6 +15,19 @@
     <label for="map">Izaberi lokaciju na mapi</label>
     <div id="map"></div>
   </div>
+  
+  <div class="form-group">
+  <!--<label for="manualAddress">ili unesite adresu ručno</label>-->
+  <input 
+    id="manualAddress" 
+    type="text" 
+    formControlName="address" 
+    placeholder="npr. Bulevar Oslobođenja 1, Novi Sad" 
+    (keyup.enter)="onAddressEntered()" 
+  />
+  <small>Možete uneti adresu ili izabrati lokaciju klikom na mapu.</small>
+</div>
+
 
   <button type="submit" [disabled]="postForm.invalid">📤 Postavi objavu</button>
   <div *ngIf="successMessage" class="success-message">
