@@ -22,7 +22,7 @@ export class ShowPostComponent {
   commentsForPost: { [key: number]: Comment[] } = {};
   //isCommentsVisible: boolean = false;
   commentFormVisibleForPostId: number | null = null;
-  userId: number = 3;
+  userId: number = 2;
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
   postsByUser: Post[] = [];

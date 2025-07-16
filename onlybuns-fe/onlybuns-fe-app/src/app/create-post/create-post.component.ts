@@ -20,12 +20,18 @@ const customIcon = icon({
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent implements OnInit {
+  
   map!: Map;
   marker?: Marker;
   postForm!: FormGroup;
   selectedFile: File | null = null;
 
   successMessage: string = '';
+  
+locationCache: globalThis.Map<string, any> = new globalThis.Map(); 
+//ovde sam imao one konflikte sa mapom, kao da ima neka druga mapa importovana u projektu pa sam morao da uzmem ovu globalnu
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -93,55 +99,108 @@ export class CreatePostComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.postForm.invalid) return;
+  if (this.postForm.invalid) return;
 
-    const description = this.postForm.get('description')?.value;
-    const latitude = this.postForm.get('latitude')?.value;
-    const longitude = this.postForm.get('longitude')?.value;
-      const address = this.postForm.get('address')?.value;  // novo
+  const description = this.postForm.get('description')?.value;
+  const latitude = this.postForm.get('latitude')?.value;
+  const longitude = this.postForm.get('longitude')?.value;
+  const address = this.postForm.get('address')?.value;
 
+  const locationData = { latitude, longitude, address };
 
-    const locationData = { latitude, longitude, address };
+  // Samo za log (nije obavezno za backend keš)
+  const locationKey = address.trim().toLowerCase();
 
-    this.locationService.createLocation(locationData).subscribe({
-      next: (locationResponse) => {
-        const locationId = locationResponse.id;
-
-        const postData = {
-          description,
-          locationId
-        };
-
-        const formData = new FormData();
-        formData.append('post', JSON.stringify(postData));
-
-        if (this.selectedFile) {
-          formData.append('imageFile', this.selectedFile, this.selectedFile.name);
-        }
-
-        this.postService.createPost(formData).subscribe({
-          next: (postResponse) => {
-          console.log('Objava uspešno kreirana', postResponse);
-          this.successMessage = 'Objava je uspešno kreirana!';
-          this.postForm.reset();
-          this.marker?.remove();
-          this.marker = undefined;
-          this.selectedFile = null;
-
-          const fileInput = document.getElementById('image') as HTMLInputElement;
-          if (fileInput) {
-            fileInput.value = '';
-          }
-
-          },
-          error: (err) => {
-            console.error('Greška prilikom kreiranja objave', err);
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Greška prilikom kreiranja lokacije', err);
+  this.locationService.createLocation(locationData).subscribe({
+    next: (locationResponse) => {
+      if (locationResponse.id === undefined) {
+        console.error('Lokacija nema ID.');
+        return;
       }
-    });
+
+      // Ovo služi samo za frontend log, backend već kešira
+      this.locationCache.set(locationKey, locationResponse);
+      console.log(`(Frontend) Keširana lokacija za ključ: "${locationKey}"`, locationResponse);
+
+      this.createPost(description, locationResponse.id);
+    },
+    error: (err) => {
+      console.error('Greška prilikom kreiranja lokacije', err);
+    }
+  });
+}
+
+
+createPost(description: string, locationId: number): void {
+  const postData = {
+    description,
+    locationId
+  };
+
+  const formData = new FormData();
+  formData.append('post', JSON.stringify(postData));
+
+  if (this.selectedFile) {
+    formData.append('imageFile', this.selectedFile, this.selectedFile.name);
   }
+
+  this.postService.createPost(formData).subscribe({
+    next: (postResponse) => {
+      console.log('Objava uspešno kreirana', postResponse);
+      this.successMessage = 'Objava je uspešno kreirana!';
+      this.postForm.reset();
+      this.marker?.remove();
+      this.marker = undefined;
+      this.selectedFile = null;
+
+      const fileInput = document.getElementById('image') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
+    },
+    error: (err) => {
+      console.error('Greška prilikom kreiranja objave', err);
+    }
+  });
+}
+
+onAddressEntered(): void {
+  const address = this.postForm.get('address')?.value;
+  if (!address) return;
+
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+    .then(response => response.json())
+    .then((results: any[]) => {
+      if (results.length === 0) {
+        alert('Adresa nije pronađena!');
+        return;
+      }
+
+      const result = results[0];
+      const lat = parseFloat(result.lat);
+      const lon = parseFloat(result.lon);
+
+      if (this.marker) {
+        this.marker.setLatLng([lat, lon]);
+      } else {
+        this.marker = marker([lat, lon], { icon: customIcon }).addTo(this.map);
+      }
+
+      this.marker.bindPopup(result.display_name).openPopup();
+
+      this.map.setView([lat, lon], 15);
+
+      this.postForm.patchValue({
+        latitude: lat,
+        longitude: lon,
+        address: result.display_name
+      });
+    })
+    .catch(() => {
+      alert('Greška pri pronalaženju adrese.');
+    });
+}
+
+
+
 }
