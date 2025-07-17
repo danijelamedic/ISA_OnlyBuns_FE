@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Post } from '../model/post.model';
-import { Comment } from '../model/comment.model';
-import { User } from '../model/user.model';
-import { UpdatePostDto } from '../model/update-post.dto.model';
-import { Like } from '../model/like.model';
-import { PostDto } from '../model/post-dto.model';
+import { Post } from './model/post.model';
+import { Comment } from './model/comment.model';
+import { User } from './model/user.model';
+import { UpdatePostDto } from './model/update-post.dto.model';
+import { Like } from './model/like.model';
+import { PostDto } from './model/post-dto.model';
 
 
 @Injectable({
@@ -14,18 +14,8 @@ import { PostDto } from '../model/post-dto.model';
 })
 export class PostService {
   private apiUrl = 'http://localhost:8080/api/posts';
-  private currentUserId: number = 1;  // dodato polje
 
   constructor(private http: HttpClient) {}
-
-  setUserId(userId: number): void {
-    this.currentUserId = userId;
-  }
-
-  getUserId(): number {
-    return this.currentUserId;
-  }
-
 
   createPost(formData: FormData) {
   return this.http.post<PostDto>('http://localhost:8080/api/posts', formData);
@@ -43,8 +33,8 @@ export class PostService {
     return this.http.get<number>('http://localhost:8080/api/posts/getLikes/' + id);
   }
 
-  getComments(postId: number): Observable<Comment[]> {
-    return this.http.get<Comment[]>(`http://localhost:8080/api/comment/post/${postId}`);
+  getComments(id: number): Observable<Comment[]>{
+    return this.http.get<Comment[]>('http://localhost:8080/api/posts/getComments/' + id);
   }
 
   getUsername(id: number): Observable<User>{
@@ -59,13 +49,13 @@ export class PostService {
     return this.http.delete<void>('http://localhost:8080/api/posts/' + id);
   }
 
-  updatePost(updatePostDto: FormData): Observable<any>{
+  updatePost(updatePostDto: UpdatePostDto): Observable<any>{
     return this.http.put('http://localhost:8080/api/posts', updatePostDto);
   }
 
   likePost(postId: number, userId: number): Observable<Like>{
     console.log(`Pozivam POST zahtev za postId: ${postId}, userId: ${userId}`);
-    return this.http.post<Like>('http://localhost:8080/api/like/likePost/' + postId + '/' + userId, null);
+    return this.http.post<Like>('http://localhost:8080/api/like/' + postId + '/' + userId, null);
   }
 
   getFollowingPosts(userId: number): Observable<Post[]>{
@@ -75,9 +65,5 @@ export class PostService {
   addComment(comment: { postId: number; userId: number; content: string }): Observable<any> {
   return this.http.post('http://localhost:8080/api/comment', comment);
 }
-
-  countLikes(id: number): Observable<number>{
-    return this.http.get<number>(`http://localhost:8080/api/like/countLikes/` + id);
-  }
 
 }

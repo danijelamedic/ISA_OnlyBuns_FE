@@ -3,4 +3,5 @@
   <a routerLink="/inbox" class="nav-link">Inbox</a>
   <a routerLink="/show-posts" class="nav-link">All posts</a>
   <a routerLink="/create-post" class="nav-link">Create post</a>
+  <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" />
 </nav>
