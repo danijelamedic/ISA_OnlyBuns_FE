@@ -1,0 +1,7 @@
+<div class="message-list">
+  <h3>Poruke o reklamiranju</h3>
+  <ul>
+  <li *ngFor="let msg of messages">{{ msg }}</li>
+</ul>
+  <p *ngIf="messages.length === 0">Nema poruka.</p>
+</div>

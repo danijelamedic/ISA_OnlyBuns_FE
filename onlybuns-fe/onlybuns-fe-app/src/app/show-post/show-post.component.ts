@@ -22,7 +22,7 @@ export class ShowPostComponent {
   commentsForPost: { [key: number]: Comment[] } = {};
   //isCommentsVisible: boolean = false;
   commentFormVisibleForPostId: number | null = null;
-  userId: number = 2;
+  userId: number = 1;
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
   postsByUser: Post[] = [];
@@ -52,6 +52,7 @@ export class ShowPostComponent {
   }
 
   ngOnInit(): void{
+    this.userId = this.userService.getUserId();
     this.getPosts();
     this.getPostsByUserId(this.userId);
     this.getFollowingPosts();
@@ -156,9 +157,12 @@ export class ShowPostComponent {
       return;
     }
 
+      const userId = this.userService.getUserId();  // Uzimamo userId iz UserService
+  console.log('User ID pri dodavanju komentara:', this.userId);  // <<< OVDE ISPIŠI ID
+  
     const commentPayload = {
       postId: postId,
-      userId: this.userId,
+      userId: userId,
       content: this.newCommentText
     };
 
@@ -246,7 +250,7 @@ export class ShowPostComponent {
     if (this.updateForm.valid && this.selectedPostId !== null) {
       const updateDto: UpdatePostDto = {
         id: this.selectedPostId,
-        userId: 1,
+        userId: this.userService.getUserId(),
         description: this.updateForm.value.description,
         imagePath: ''
       };

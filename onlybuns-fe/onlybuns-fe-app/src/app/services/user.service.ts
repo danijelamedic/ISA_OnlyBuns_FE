@@ -9,8 +9,18 @@ import { Follower } from '../model/follower.mode';
   providedIn: 'root'
 })
 export class UserService {
+  
+private currentUserId: number = 1;   // dodato polje
 
   constructor(private http: HttpClient) { }
+
+  setUserId(userId: number): void {
+    this.currentUserId = userId;
+  }
+
+  getUserId(): number {
+    return this.currentUserId;
+  }
 
   getUsers(page: number, size: number): Observable<PaginatedResponse>{
     const params = new HttpParams()

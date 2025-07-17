@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../services/post.service';
 import { LocationService } from '../location.service';
 import { icon } from 'leaflet';
+import { UserService } from '../services/user.service';
 
 const customIcon = icon({
   iconUrl: 'assets/leaflet/marker-icon.png',
@@ -36,7 +37,8 @@ locationCache: globalThis.Map<string, any> = new globalThis.Map();
   constructor(
     private fb: FormBuilder,
     private postService: PostService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -132,9 +134,13 @@ locationCache: globalThis.Map<string, any> = new globalThis.Map();
 
 
 createPost(description: string, locationId: number): void {
+
+      const userId = this.userService.getUserId();
+
   const postData = {
     description,
-    locationId
+    locationId,
+    userId
   };
 
   const formData = new FormData();
