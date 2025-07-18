@@ -1,7 +1,13 @@
 <nav class="navbar">
   <a routerLink="/" class="nav-link">Homepage</a>
-  <a routerLink="/inbox" class="nav-link">Inbox</a>
-  <a routerLink="/show-posts" class="nav-link">All posts</a>
-  <a routerLink="/create-post" class="nav-link">Create post</a>
+  <a routerLink="/inbox" class="nav-link" *ngIf="isLoggedIn()">Inbox</a>
+  <a routerLink="/show-posts" class="nav-link" >All posts</a>
+  <a routerLink="/create-post" class="nav-link" *ngIf="isLoggedIn()">Create post</a>
+  <a routerLink="/login" class="nav-link" *ngIf="!isLoggedIn()">Login</a>
+  <a routerLink="/register" class="nav-link" *ngIf="!isLoggedIn()">Register</a>
+  <a (click)="logout()" class="nav-link" *ngIf="isLoggedIn()" style="cursor:pointer;">Logout</a>
   <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" />
+
+  <span *ngIf="username">Welcome, {{ username }}!</span>
+
 </nav>

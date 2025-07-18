@@ -1,0 +1,27 @@
+<!-- <p>login works!</p> -->
+<div class="main-center-bg">
+    <div class="login-container">
+        <h2>Login</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" formControlName="email" />
+            <div *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].invalid">
+                <small *ngIf="loginForm.controls['email'].errors?.['required']">Email is required.</small>
+                <small *ngIf="loginForm.controls['email'].errors?.['email']">Invalid email format.</small>
+            </div>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" formControlName="password" />
+            <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid">
+                <small *ngIf="loginForm.controls['password'].errors?.['required']">Password is required.</small>
+            </div>
+
+            <button type="submit" [disabled]="loginForm.invalid">Login</button>
+        </form>
+        <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+        </div>
+    </div>
+</div>

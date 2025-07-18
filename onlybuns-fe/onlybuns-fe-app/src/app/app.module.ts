@@ -21,6 +21,9 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +40,9 @@ import { InboxComponent } from './inbox/inbox.component';
     ViewUsersComponent,
     NavbarComponent,
     SocketComponent,
-    InboxComponent
+    InboxComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +52,8 @@ import { InboxComponent } from './inbox/inbox.component';
     FormsModule,
     NgChartsModule,    
     LeafletModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
