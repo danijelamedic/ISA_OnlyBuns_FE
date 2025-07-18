@@ -1,0 +1,120 @@
+<div class="userForm" *ngIf="!userId">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <p>unesi id</p>
+    <input formControlName="userId" type="number"/>
+    <button type="submit">ok</button>
+    </form>
+</div>
+
+<div class="inbox-container" *ngIf="userId">
+    <div class = "chat-list">
+        <button (click)="openNewChatModal()" class="button">add group</button>
+        <button (click)="openNewPrivateChatModal()" class="button">add chat</button>
+
+        <div class="chat-box" *ngFor="let chat of chats" (click)="selectChat(chat)" [class.selected]="chat === selectedChat">
+            {{chat.name || chat.receiverUsername || 'Nepoznat'}}
+        </div>
+    </div>
+
+
+    <div class = "chat">
+        <div class="chat-receiver" *ngIf="selectedChat" (click)="openParticipantsModal()">
+            {{ getChatDisplayName(selectedChat) }}
+        </div>
+
+        <div class="messages" #scrollMe>
+           <div *ngFor="let message of messages; let i = index">
+                <div *ngIf="shouldShowDate(i)" class="separator">
+                    <div class="date-separator">{{ message.dateTime | date: 'dd.MM.yyyy.' }}</div>
+                </div>    
+
+            <div class="message-wrapper"  [ngClass]="{'left': message.senderId !== userId, 'right': message.senderId === userId}">
+                <div *ngIf="selectedChat?.type === 'GROUP'" class="username">
+                        {{ senderUsernames[message.senderId] }}
+                    </div>
+                    <div class="message">
+                        {{message.message}}
+                    </div>
+                    <p class="timestamp">{{ message.dateTime | date: 'HH:mm' }}</p>
+                
+
+                </div>
+            </div>
+        </div>
+
+        <div class="message-box">
+            <input class="typeMessage" type="text" placeholder="Write message..." [(ngModel)]="newMessageText" (keyup.enter)="sendMessage()" >
+        </div>
+    </div>
+
+    <div class="modal-background" *ngIf="isNewGroupModalOpen">
+        <div class="modal">
+            <h2>Create group</h2>
+            <form (ngSubmit)="onSubmit()" #groupForm="ngForm">
+                <div class="formLabel">
+                    <label>Name: </label>
+                    <input [(ngModel)]="newGroup.name" name="name" required/>
+                </div>
+                
+                <div class="formLabel">
+                    <div class="selected-users">
+                    <span *ngFor="let user of selectedUsers" class="tag">
+                        {{ user.username }}
+                        <button (click)="removeUser(user.id)">x</button>
+                    </span>
+                    </div>
+
+                    <div class="user-dropdown">
+                    <div *ngFor="let user of filteredUsers" class="user-item" (click)="selectUser(user)">
+                        {{ user.username }}
+                    </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="button" type="submit" [disabled]="!groupForm.form.valid">Create</button>
+                    <button class="button" type="button" (click)="closeNewGroupModal()">Cancel</button>
+                </div>
+            </form>
+            
+        </div>
+
+    </div>
+
+    <div class="modal-background" *ngIf="isParticipantsModalOpen">
+        <div class="modal">
+            <button class="button" (click)="closeParticipantsModal()">Close</button>
+            <div class="user-dropdown">
+                <div *ngFor="let user of participants" class="chatParticipants">
+                    <span>{{ user.username }}</span>
+                    <button class="removeUser" (click)="removeUserFromGroup(user.id)">x</button>
+                </div>
+            </div>
+            <button class="button" (click)="addUser()">Add user</button>
+            <div class="formLabel" *ngIf="isAddUserOpened">
+                <div class="user-dropdown">
+                    <div *ngFor="let user of suggestedUsers" class="user-item" (click)="addUserToGroup(user.id)">
+                        {{ user.username }}
+                    </div>
+                </div>
+                <button class="button" (click)="closeAddUserPart()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-background" *ngIf="showUserModal">
+        <div class="modal">
+            <div class="modal-content">
+                <h3>Choose a user to start chat with</h3>
+                <div class="user-dropdown">
+                    <div *ngFor="let user of allUsers" class="user-item" (click)="openChat(user.id)">
+                        {{ user.username }}
+                    </div>
+                </div>
+                <button class="button" (click)="closeUserModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</div>

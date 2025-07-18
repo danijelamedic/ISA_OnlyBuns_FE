@@ -7,7 +7,11 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { ShowPostComponent } from './show-post/show-post.component';
-import { ViewUsersComponent } from './admin/view-users/view-users.component';
+import { SocketComponent } from './web-socket/web-socket.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { NearbyPostsComponent } from './nearby-posts/nearby-posts.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,7 +21,12 @@ const routes: Routes = [
   { path: 'profiles', component: ProfilesComponent },
   { path: 'create-post', component: CreatePostComponent },
   { path: 'show-posts', component: ShowPostComponent },
-  { path: 'admin/users', component: ViewUsersComponent}
+  { path: 'admin', component: HomeComponent },
+  { path: 'socket', component: SocketComponent, pathMatch: 'full' },
+  { path: 'inbox', component: InboxComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'nearby-posts', component: NearbyPostsComponent }
 ];
 
 @NgModule({

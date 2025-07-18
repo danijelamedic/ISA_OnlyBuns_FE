@@ -1,0 +1,160 @@
+.admin-home {
+  display: flex;
+  justify-content: space-between; 
+}
+
+.panel {
+  flex:1;
+  max-width: 15%;
+  margin-right: 10px;
+  padding: 20px;
+  border-right: 2px solid #333;
+}
+
+.admin-show-users{
+  flex:1;
+}
+
+.nav-links {
+  list-style-type: none;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 15px 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #9db4c0;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.analytics-right{
+flex: 1;
+}
+
+.analytics {
+  display: flex;
+  justify-content: center; 
+  gap: 20px;
+}
+
+.comment-analytics, .post-analytics {
+  width: 48%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 25px;
+  margin-bottom: 20px;
+  color:#9db4c0;
+}
+
+.options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.options label {
+  font-size: 1.5em;
+  color: #555;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 1em;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group button {
+  background-color: #9db4c0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.input-group button:hover {
+  background-color: #9db4c0;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.result h2 {
+  font-size: 1.2em;
+  color: #9db4c0;
+}
+
+.nodata {
+  font-size: 1.5em;
+}
+
+.large-text {
+  font-size: 70px;
+  color: #9db4c0;
+
+}
+
+.result p:last-child {
+  color: #888;
+}
+
+
+.charts {
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px
+}
+
+.chart-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.title{
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  background-color: #9db4c0;
+  color: white;
+  font-size: 2.5rem;
+}
+
+.admin-panel {
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  background-color: #9db4c0;
+  color: white;
+  font-size: 32px;
+}

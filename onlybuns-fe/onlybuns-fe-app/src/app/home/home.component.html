@@ -1,11 +1,83 @@
-<div class="admin-home">
-    <h1>Administrator Panel</h1>
+<div class="admin-home" *ngIf="user.role === 'ADMIN'">
+  <div class="panel">
+    <h1>Admin Panel</h1>
     
     <ul class="nav-links">
-      <li><a routerLink="/posts">Lista objava svih korisnika</a></li>
-      <li><a routerLink="/trends">Prikaz trendova na mreži</a></li>
-      <li><a routerLink="/analytics">Analitika aplikacije</a></li>
-      <li><a routerLink="/profiles">Prikaz profila svih korisnika</a></li>
-      <li><a routerLink="/create-post">Kreiraj objavu</a></li>
+      <li><a routerLink="/show-posts">All users posts</a></li>
+      <li><a routerLink="/trends">Trends</a></li>
+      <li><a routerLink="/analytics">Analytics</a></li>
     </ul>
   </div>
+
+  <div class="admin-show-users">
+    <h1>Registered users</h1>
+    <div class="filters-container">
+      <div class="filter-row">
+        <div class="filter">
+          <input type="text" placeholder="Pretraga po imenu" [(ngModel)]="searchName" />
+          <input type="text" placeholder="Pretraga po prezimenu" [(ngModel)]="searchSurnameValue" />
+          <input type="text" placeholder="Pretraga po email-u" [(ngModel)]="searchEmail" />
+          <input type="number" placeholder="Min Posts" [(ngModel)]="minPosts" class="narrow-input" />
+          <input type="number" placeholder="Max Posts" [(ngModel)]="maxPosts" class="narrow-input" />
+
+
+        </div>
+        <div class="filter">
+          <button class="button" (click)="searchByName(searchName)">Search by Name</button>
+          <button class="button" (click)="searchBySurname(searchSurnameValue)">Search by Surname</button>
+          <button class="button" (click)="searchByEmail(searchEmail)">Search by Email</button>
+          <button class="button" (click)="filterByPostsNumber(minPosts, maxPosts)">Filter by Posts Number</button>
+        </div>
+      </div>
+      
+      <div class="filter-row">
+        <div class="filter">
+        </div>
+        <div class="filter">
+        </div>
+      </div>
+
+      <!-- Dugme za reset filtera -->
+      <div class="reset-button">
+        <button class="button" (click)="resetFilters()">Reset Filters</button>
+      </div>
+    </div>
+
+
+    <div>
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th (click)="sortMail()">Email</th>
+            <th>Posts num</th>
+            <th>Following</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.username }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.postsNum }}</td>
+            <td>{{ user.followerNum }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="buttons">
+        <button class="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+        <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+        <button class="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === (totalPages ?? 0) - 1">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="user.role !== 'ADMIN'">
+  nisam admin
+
+</div>

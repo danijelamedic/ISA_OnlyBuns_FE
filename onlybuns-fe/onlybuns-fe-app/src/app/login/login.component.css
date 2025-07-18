@@ -1,0 +1,48 @@
+.login-container {
+    max-width: 380px;
+    background: #fff;
+    padding: 2.5rem 2rem;
+    margin: 0 auto;
+    border-radius: 18px;
+    box-shadow: 0 6px 30px 0 rgba(44, 62, 80, .08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+label {
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.3rem;
+    border-radius: 6px;
+    border: 1px solid #bfc4c7;
+    background: #f5f7fa;
+}
+
+button[type="submit"] {
+    background: #5352ec;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    margin-top: 1.1rem;
+    transition: background 0.18s;
+}
+
+button[disabled] {
+    background: #b3b6ca;
+}
+
+.error-message {
+    color: #d90429;
+    margin-top: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+}
