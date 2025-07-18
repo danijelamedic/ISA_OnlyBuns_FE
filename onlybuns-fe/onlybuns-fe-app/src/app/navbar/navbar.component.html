@@ -1,7 +1,29 @@
 <nav class="navbar">
-  <a routerLink="/" class="nav-link">Homepage</a>
-  <a routerLink="/inbox" class="nav-link">Inbox</a>
-  <a routerLink="/show-posts" class="nav-link">All posts</a>
-  <a routerLink="/create-post" class="nav-link">Create post</a>
-  <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" />
+  <div class="nav-links">
+    <a routerLink="/create-post" class="nav-link">Create post</a>
+
+    <ng-container *ngIf="userRole === 'ADMIN'; else regularUser">
+      <a routerLink="/" class="nav-link">Homepage</a>
+      <a routerLink="/inbox" class="nav-link">Inbox</a>
+      <a routerLink="/show-posts" class="nav-link">All posts</a>
+    </ng-container>
+
+    <ng-template #regularUser>
+      <a [routerLink]="['/show-posts']" [queryParams]="{ selectedTab: 3 }" class="nav-link">Followed users' posts</a>
+      <a routerLink="/trends" class="nav-link">Trending</a>
+      <a routerLink="/nearby-posts" class="nav-link">Nearby posts</a>
+      <a routerLink="/inbox" class="nav-link">Chat</a>
+      <a [routerLink]="['/show-posts']" [queryParams]="{ selectedTab: 1 }" class="nav-link">My profile</a>
+    </ng-template>
+  </div>
+
+  <div class="nav-userid">
+    <input
+      type="number"
+      [(ngModel)]="userId"
+      (input)="onUserIdChange()"
+      placeholder="Enter user ID"
+      class="user-id-input"
+    />
+  </div>
 </nav>

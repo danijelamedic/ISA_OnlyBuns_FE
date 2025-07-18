@@ -8,6 +8,7 @@ import { User } from '../model/user.model';
 import { UserService } from '../services/user.service';
 import { Follower } from '../model/follower.mode';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-show-post',
@@ -43,20 +44,29 @@ export class ShowPostComponent {
   followingUsers: User[] = [];
   explorePosts: Post[] = [];
   isFollowed: boolean = false;
+
   
-  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService){
+  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService,  private route: ActivatedRoute){
     this.updateForm = this.fb.group({
       description: [''],
       image: [null]
     });
   }
 
-  ngOnInit(): void{
-    this.userId = this.userService.getUserId();
-    this.getPosts();
-    this.getPostsByUserId(this.userId);
-    this.getFollowingPosts();
-  }
+  ngOnInit(): void {
+  this.userId = this.userService.getUserId();
+
+  this.route.queryParams.subscribe((params: { selectedTab?: string }) => {
+    const tab = params.selectedTab ? +params.selectedTab : 1;
+    this.selectedTab = tab;
+  });
+
+  this.getPosts();
+  this.getPostsByUserId(this.userId);
+  this.getFollowingPosts();
+}
+
+
 
   getPosts(): void{
     this.postService.showPost().subscribe({

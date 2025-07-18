@@ -21,6 +21,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';
+import { NearbyPostsComponent } from './nearby-posts/nearby-posts.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { InboxComponent } from './inbox/inbox.component';
     ViewUsersComponent,
     NavbarComponent,
     SocketComponent,
-    InboxComponent
+    InboxComponent,
+    NearbyPostsComponent
   ],
   imports: [
     BrowserModule,
