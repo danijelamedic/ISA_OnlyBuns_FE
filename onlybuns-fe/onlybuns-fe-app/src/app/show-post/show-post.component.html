@@ -75,7 +75,7 @@
       <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
       <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
       <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
-      <button (click)="toggleCommentForm(post.id)" class="button">Add comment</button>
+      <!--<button (click)="toggleCommentForm(post.id)" class="button">Add comment</button>-->
       
     </div>
 
@@ -121,20 +121,10 @@
         <span class="red-heart">❤️</span>
       </p>
       <button *ngIf="post.id" class="like-button" (click)="likePost(post.id)">Like</button>
-      <button class="button" (click)="loadComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
+      <button class="button" (click)="loadFollowingComments(post.id)" *ngIf="!post.isCommentsVisible">Show comments</button>
       <button class="button" (click)="closeComments(post.id)" *ngIf="post.isCommentsVisible">Close comments</button>
       <button (click)="toggleCommentForm(post.id)" class="button">Add comment</button>
       
-    </div>
-
-    <div *ngIf="post.isCommentsVisible" class="comments-section">
-      <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
-        <div class="comment-header">
-          <strong>{{ comment.postId }}</strong>
-          <span>{{ comment.creationTime | date: 'short' }}</span>
-        </div>
-        <p>{{ comment.content }}</p>
-      </div>
     </div>
 
     <div *ngIf="commentFormVisibleForPostId === post.id">
@@ -142,5 +132,16 @@
       <br>
       <button (click)="addComment(post.id)">Add comment</button>
     </div>
-  </div>
+    
+    <div *ngIf="post.isCommentsVisible" class="comments-section">
+      <div *ngFor="let comment of commentsForPost[post.id]" class="comment-box">
+        <div class="comment-header">
+          <strong>{{ comment.id }}</strong>
+            <span style="color: gray; font-size: 0.8em;"> {{ comment.creationTime | date:'dd.MM.yyyy HH:mm' }}</span>
+          <!--<span>{{ comment.creationTime | date: 'short' }}</span>-->
+        </div>
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+
 </div>

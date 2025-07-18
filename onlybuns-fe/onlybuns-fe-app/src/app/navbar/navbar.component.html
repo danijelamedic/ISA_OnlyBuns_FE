@@ -1,13 +1,34 @@
 <nav class="navbar">
-  <a routerLink="/" class="nav-link">Homepage</a>
-  <a routerLink="/inbox" class="nav-link" *ngIf="isLoggedIn()">Inbox</a>
-  <a routerLink="/show-posts" class="nav-link" >All posts</a>
-  <a routerLink="/create-post" class="nav-link" *ngIf="isLoggedIn()">Create post</a>
-  <a routerLink="/login" class="nav-link" *ngIf="!isLoggedIn()">Login</a>
-  <a routerLink="/register" class="nav-link" *ngIf="!isLoggedIn()">Register</a>
-  <a (click)="logout()" class="nav-link" *ngIf="isLoggedIn()" style="cursor:pointer;">Logout</a>
-  <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" />
+  <div class="nav-links">
+    <!-- Admin Links -->
+    <ng-container *ngIf="userRole === 'ADMIN'; else regularUser">
+      <a routerLink="/" class="nav-link">Homepage</a>
+      <a routerLink="/inbox" class="nav-link">Inbox</a>
+      <a routerLink="/show-posts" class="nav-link">All posts</a>
+    </ng-container>
 
+    <!-- Regular User Links -->
+    <ng-template #regularUser>
+      <a [routerLink]="['/show-posts']" [queryParams]="{ selectedTab: 3 }" class="nav-link">Followed users' posts</a>
+      <a routerLink="/trends" class="nav-link">Trending</a>
+      <a routerLink="/nearby-posts" class="nav-link">Nearby posts</a>
+      <a routerLink="/inbox" class="nav-link">Chat</a>
+      <a [routerLink]="['/show-posts']" [queryParams]="{ selectedTab: 1 }" class="nav-link">My profile</a>
+    </ng-template>
+
+    <!-- Common Links for Logged-in Users -->
+    <a routerLink="/create-post" class="nav-link" *ngIf="isLoggedIn()">Create post</a>
+    <a routerLink="/login" class="nav-link" *ngIf="!isLoggedIn()">Login</a>
+    <a routerLink="/register" class="nav-link" *ngIf="!isLoggedIn()">Register</a>
+    <a (click)="logout()" class="nav-link" *ngIf="isLoggedIn()" style="cursor:pointer;">Logout</a>
+  </div>
+
+  <div class="nav-userid">
+    <!-- User ID Input -->
+    <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" placeholder="Enter user ID"
+      class="user-id-input" />
+  </div>
+
+  <!-- Username Display -->
   <span *ngIf="username">Welcome, {{ username }}!</span>
-
 </nav>

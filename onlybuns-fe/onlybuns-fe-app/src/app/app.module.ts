@@ -21,9 +21,11 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';
+
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
+import { NearbyPostsComponent } from './nearby-posts/nearby-posts.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { RegisterComponent } from './register/register.component';
     SocketComponent,
     InboxComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    NearbyPostsComponent
   ],
   imports: [
     BrowserModule,

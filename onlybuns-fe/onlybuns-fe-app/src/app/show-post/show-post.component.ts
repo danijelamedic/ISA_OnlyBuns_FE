@@ -8,6 +8,7 @@ import { User } from '../model/user.model';
 import { UserService } from '../services/user.service';
 import { Follower } from '../model/follower.mode';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-show-post',
@@ -43,20 +44,29 @@ export class ShowPostComponent {
   followingUsers: User[] = [];
   explorePosts: Post[] = [];
   isFollowed: boolean = false;
+
   
-  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService){
+  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService,  private route: ActivatedRoute){
     this.updateForm = this.fb.group({
       description: [''],
       image: [null]
     });
   }
 
-  ngOnInit(): void{
-    this.userId = this.userService.getUserId();
-    this.getPosts();
-    this.getPostsByUserId(this.userId);
-    this.getFollowingPosts();
-  }
+  ngOnInit(): void {
+  this.userId = this.userService.getUserId();
+
+  this.route.queryParams.subscribe((params: { selectedTab?: string }) => {
+    const tab = params.selectedTab ? +params.selectedTab : 1;
+    this.selectedTab = tab;
+  });
+
+  this.getPosts();
+  this.getPostsByUserId(this.userId);
+  this.getFollowingPosts();
+}
+
+
 
   getPosts(): void{
     this.postService.showPost().subscribe({
@@ -106,13 +116,40 @@ export class ShowPostComponent {
   loadComments(postId: number): void {
   this.postService.getComments(postId).subscribe({
     next: (comments: Comment[]) => {
+      console.log(`Komentari za post ${postId}:`, comments);
+
       this.commentsForPost[postId] = comments.sort((a, b) => 
         new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime()
       );
 
-      const post = this.posts.find(p => p.id === postId);
-      if (post) {
+      // Pokušaj pronaći post u svim relevantnim nizovima
+      let post = this.posts.find(p => p.id === postId);
+      if (!post) {
+        const followingIndex = this.followingPosts.findIndex(p => p.id === postId);
+        if (followingIndex !== -1) {
+          this.followingPosts[followingIndex].isCommentsVisible = true;
+          post = this.followingPosts[followingIndex];
+        }
+      } else {
         post.isCommentsVisible = true;
+      }
+
+      if (!post) {
+        const exploreIndex = this.explorePosts.findIndex(p => p.id === postId);
+        if (exploreIndex !== -1) {
+          this.explorePosts[exploreIndex].isCommentsVisible = true;
+          post = this.explorePosts[exploreIndex];
+        }
+      }
+
+      // Opcionalno: ako je post promenjen u nekom od nizova, možeš "osvežiti" niz
+      if (post) {
+        // Osveži odgovarajući niz da Angular vidi promenu (ako treba)
+        this.posts = [...this.posts];
+        this.followingPosts = [...this.followingPosts];
+        this.explorePosts = [...this.explorePosts];
+
+        console.log('Updated post after loading comments:', post);
       }
     },
     error: (error: any) => {
@@ -122,12 +159,56 @@ export class ShowPostComponent {
 }
 
 
-  closeComments(postId: number): void {
-    const post = this.posts.find(p => p.id === postId);
-    if (post) {
-      post.isCommentsVisible = false;
+loadFollowingComments(postId: number): void {
+  this.postService.getComments(postId).subscribe({
+    next: (comments: Comment[]) => {
+
+      this.commentsForPost[postId] = comments.sort((a, b) => 
+        new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime()
+      );
+
+      // Ne koristi find direktno, već manipuliši u 'followingPosts' direktno:
+      const index = this.followingPosts.findIndex(p => p.id === postId);
+      if (index !== -1) {
+        this.followingPosts[index].isCommentsVisible = true;
+        console.log('Updated followingPosts post:', this.followingPosts[index]);
+      }
+    },
+    error: (error: any) => {
+      console.error('Error loading comments:', error);
     }
+  });
+} 
+
+  closeComments(postId: number): void {
+  let found = false;
+
+  const postsIndex = this.posts.findIndex(p => p.id === postId);
+  if (postsIndex !== -1) {
+    this.posts[postsIndex].isCommentsVisible = false;
+    found = true;
   }
+
+  const followingIndex = this.followingPosts.findIndex(p => p.id === postId);
+  if (followingIndex !== -1) {
+    this.followingPosts[followingIndex].isCommentsVisible = false;
+    found = true;
+  }
+
+  const exploreIndex = this.explorePosts.findIndex(p => p.id === postId);
+  if (exploreIndex !== -1) {
+    this.explorePosts[exploreIndex].isCommentsVisible = false;
+    found = true;
+  }
+
+  // Osveži nizove da Angular vidi promene
+  if (found) {
+    this.posts = [...this.posts];
+    this.followingPosts = [...this.followingPosts];
+    this.explorePosts = [...this.explorePosts];
+  }
+}
+
 
   getUsername(userId: number): void{
     if (!this.usernames[userId]) {
