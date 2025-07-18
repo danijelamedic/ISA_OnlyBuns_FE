@@ -9,6 +9,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { ShowPostComponent } from './show-post/show-post.component';
 import { SocketComponent } from './web-socket/web-socket.component';
 import { InboxComponent } from './inbox/inbox.component';
+import { NearbyPostsComponent } from './nearby-posts/nearby-posts.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'show-posts', component: ShowPostComponent },
   { path: 'admin', component: HomeComponent},
   { path: 'socket', component: SocketComponent, pathMatch: 'full'},
-  { path: 'inbox', component: InboxComponent}
+  { path: 'inbox', component: InboxComponent},
+  { path: 'nearby-posts', component: NearbyPostsComponent },
 ];
 
 @NgModule({

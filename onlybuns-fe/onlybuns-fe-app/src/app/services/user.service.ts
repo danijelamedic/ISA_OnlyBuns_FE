@@ -116,4 +116,8 @@ private currentUserId: number = 1;   // dodato polje
   getAllUsers(): Observable<User[]>{
     return this.http.get<User[]>(`http://localhost:8080/api/users/getAll`);
   }
+
+  getUserRoleById(userId: number): Observable<string> {
+    return this.http.get(`http://localhost:8080/api/users/${userId}/role`, { responseType: 'text' });
+  }
 }
