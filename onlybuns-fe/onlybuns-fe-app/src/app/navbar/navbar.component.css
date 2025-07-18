@@ -3,7 +3,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #5c6b73; /* tamno plava pozadina */
+  background-color: #5c6b73;
+  /* tamno plava pozadina */
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -23,18 +24,21 @@
 }
 
 .nav-link:hover {
-  background-color: #34495e; /* svetlija nijansa plave */
+  background-color: #34495e;
+  /* svetlija nijansa plave */
 }
 
 .nav-userid {
   /* Desno poravnanje već je postignuto flex-om na roditelju */
 }
+
 .user-id-input {
   padding: 6px 10px;
   border-radius: 8px;
   border: 1.5px solid #ccc;
   outline: none;
-  width: 100px;         /* manja širina */
+  width: 100px;
+  /* manja širina */
   font-size: 14px;
   font-weight: 500;
   background-color: #f9f9f9;

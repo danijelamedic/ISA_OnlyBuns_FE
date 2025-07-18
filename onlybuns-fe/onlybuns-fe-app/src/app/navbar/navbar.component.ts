@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -7,35 +8,51 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-    userId: number = 1;  // pocetna vrednost
-    userRole: string | null = null;
-    constructor(private userService: UserService) {}
-    ngOnChanges() {
-      this.userService.setUserId(this.userId);
-    }
+  userId: number = 1;  // Pocetna vrednost
+  userRole: string | null = null;  // Dodano iz druge grane
+  username: string | null = null;
 
-    updateUserId() {
-      this.userService.setUserId(this.userId);
-      console.log("Postavljen userId na:", this.userId);
-    }
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) { }
 
-    onUserIdChange(): void {
-  if (this.userId != null) {
-    console.log('Pozivam backend za userId=', this.userId);
-    this.userService.getUserRoleById(this.userId).subscribe({
-      next: (role) => {
-        console.log("promena", role);
-        this.userRole = role;
-      },
-      error: (err) => {
-        console.error("Greška pri dohvatanju role:", err);
-        this.userRole = null;
-      }
-    });
-  } else {
-    console.log("promena3");
-    this.userRole = null;
+  ngOnChanges() {
+    this.userService.setUserId(this.userId);
   }
-}
+
+  onUserIdChange(): void {
+    if (this.userId != null) {
+      console.log('Pozivam backend za userId=', this.userId);
+      this.userService.getUserRoleById(this.userId).subscribe({
+        next: (role) => {
+          console.log("promena", role);
+          this.userRole = role;
+        },
+        error: (err) => {
+          console.error("Greška pri dohvatanju role:", err);
+          this.userRole = null;
+        }
+      });
+    } else {
+      console.log("promena3");
+      this.userRole = null;
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    window.location.href = '/login';   // Možeš koristiti this.router.navigate(['/login']);
+  }
+
+  ngOnInit() {
+    this.username = localStorage.getItem('username');
+  }
 
 }
