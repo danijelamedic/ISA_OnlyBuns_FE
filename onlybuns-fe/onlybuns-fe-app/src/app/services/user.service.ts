@@ -12,6 +12,7 @@ export class UserService {
   
 private currentUserId: number = 1;   // dodato polje
 
+
   constructor(private http: HttpClient) { }
 
   setUserId(userId: number): void {

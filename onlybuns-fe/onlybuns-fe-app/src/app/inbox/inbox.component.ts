@@ -18,8 +18,8 @@ import { User } from '../model/user.model';
 })
 export class InboxComponent implements OnInit {
   @ViewChild('scrollMe') private messagesContainer!: ElementRef;
-  loginForm: FormGroup;
-  userId: number | null = null;
+  // loginForm: FormGroup;
+  userId: number = Number(localStorage.getItem("userId"));
   private serverUrl = environment.url + 'socket'
   private stompClient: any;
   isLoaded: boolean = false;
@@ -28,9 +28,7 @@ export class InboxComponent implements OnInit {
               private fb: FormBuilder,
               private socketService: SocketService,
               private userService: UserService) {
-    this.loginForm = this.fb.group({
-      userId: ['']
-    });
+
   }
 
   chats: Chat[] = [];
@@ -180,13 +178,13 @@ export class InboxComponent implements OnInit {
     this.userId = id;
   }
 
-  onLogin(): void {
-    const inputId = this.loginForm.value.userId;
-    if (inputId) {
-      this.userId = +inputId;
-      this.getChatsByUser(this.userId);
-    }
-  }
+  // onLogin(): void {
+  //   const inputId = this.loginForm.value.userId;
+  //   if (inputId) {
+  //     this.userId = +inputId;
+  //     this.getChatsByUser(this.userId);
+  //   }
+  // }
 
   scrollToBottom(): void {
     try {

@@ -3,7 +3,7 @@
     <!-- Admin Links -->
     <ng-container *ngIf="userRole === 'ADMIN'; else regularUser">
       <a routerLink="/" class="nav-link">Homepage</a>
-      <a routerLink="/inbox" class="nav-link">Inbox</a>
+      <!-- <a routerLink="/inbox" class="nav-link">Inbox</a> -->
       <a routerLink="/show-posts" class="nav-link">All posts</a>
     </ng-container>
 
@@ -14,6 +14,7 @@
       <a routerLink="/nearby-posts" class="nav-link">Nearby posts</a>
       <a routerLink="/inbox" class="nav-link">Chat</a>
       <a [routerLink]="['/show-posts']" [queryParams]="{ selectedTab: 1 }" class="nav-link">My profile</a>
+      <a routerLink="/" class="nav-link">Homepage</a>
     </ng-template>
 
     <!-- Common Links for Logged-in Users -->
@@ -21,12 +22,6 @@
     <a routerLink="/login" class="nav-link" *ngIf="!isLoggedIn()">Login</a>
     <a routerLink="/register" class="nav-link" *ngIf="!isLoggedIn()">Register</a>
     <a (click)="logout()" class="nav-link" *ngIf="isLoggedIn()" style="cursor:pointer;">Logout</a>
-  </div>
-
-  <div class="nav-userid">
-    <!-- User ID Input -->
-    <input type="number" [(ngModel)]="userId" (input)="onUserIdChange()" placeholder="Enter user ID"
-      class="user-id-input" />
   </div>
 
   <!-- Username Display -->

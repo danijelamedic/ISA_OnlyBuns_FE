@@ -29,7 +29,7 @@ export class LoginComponent {
       localStorage.setItem('userId', res.userId);
       localStorage.setItem('email', res.email);
       localStorage.setItem('username', res.username);
-      this.router.navigate(['/show-posts']).then(() => {
+      this.router.navigate(['/']).then(() => {
           window.location.reload(); // reloaduj da bi Navbar pokupio username iz localStorage
         });
     },

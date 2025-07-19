@@ -23,7 +23,7 @@ export class ShowPostComponent {
   commentsForPost: { [key: number]: Comment[] } = {};
   //isCommentsVisible: boolean = false;
   commentFormVisibleForPostId: number | null = null;
-  userId: number = 1;
+  userId: number = Number(localStorage.getItem("userId"));
   isCommentFormVisible: boolean = false;
   newCommentText: string = '';
   postsByUser: Post[] = [];
@@ -36,7 +36,7 @@ export class ShowPostComponent {
   imagePreview: string | ArrayBuffer | null = null;
   updatePostDto: UpdatePostDto = {
     id: 0,
-    userId: 1,
+    userId: 0,
     description: '',
     imagePath: ''
   };
@@ -54,7 +54,6 @@ export class ShowPostComponent {
   }
 
   ngOnInit(): void {
-  this.userId = this.userService.getUserId();
 
   this.route.queryParams.subscribe((params: { selectedTab?: string }) => {
     const tab = params.selectedTab ? +params.selectedTab : 1;
@@ -122,7 +121,6 @@ export class ShowPostComponent {
         new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime()
       );
 
-      // Pokušaj pronaći post u svim relevantnim nizovima
       let post = this.posts.find(p => p.id === postId);
       if (!post) {
         const followingIndex = this.followingPosts.findIndex(p => p.id === postId);
@@ -142,9 +140,7 @@ export class ShowPostComponent {
         }
       }
 
-      // Opcionalno: ako je post promenjen u nekom od nizova, možeš "osvežiti" niz
       if (post) {
-        // Osveži odgovarajući niz da Angular vidi promenu (ako treba)
         this.posts = [...this.posts];
         this.followingPosts = [...this.followingPosts];
         this.explorePosts = [...this.explorePosts];
@@ -167,7 +163,6 @@ loadFollowingComments(postId: number): void {
         new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime()
       );
 
-      // Ne koristi find direktno, već manipuliši u 'followingPosts' direktno:
       const index = this.followingPosts.findIndex(p => p.id === postId);
       if (index !== -1) {
         this.followingPosts[index].isCommentsVisible = true;
@@ -201,7 +196,6 @@ loadFollowingComments(postId: number): void {
     found = true;
   }
 
-  // Osveži nizove da Angular vidi promene
   if (found) {
     this.posts = [...this.posts];
     this.followingPosts = [...this.followingPosts];
@@ -238,12 +232,11 @@ loadFollowingComments(postId: number): void {
       return;
     }
 
-      const userId = this.userService.getUserId();  // Uzimamo userId iz UserService
-  console.log('User ID pri dodavanju komentara:', this.userId);  // <<< OVDE ISPIŠI ID
+  console.log('User ID pri dodavanju komentara:', this.userId);
   
     const commentPayload = {
       postId: postId,
-      userId: userId,
+      userId: this.userId,
       content: this.newCommentText
     };
 
@@ -331,7 +324,7 @@ loadFollowingComments(postId: number): void {
     if (this.updateForm.valid && this.selectedPostId !== null) {
       const updateDto: UpdatePostDto = {
         id: this.selectedPostId,
-        userId: this.userService.getUserId(),
+        userId: this.userId,
         description: this.updateForm.value.description,
         imagePath: ''
       };

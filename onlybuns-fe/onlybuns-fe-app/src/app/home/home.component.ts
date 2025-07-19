@@ -29,7 +29,7 @@ export class HomeComponent {
     role: Role.REGISTERED_USER,
     followerNum: 0
   };
-  userId: number = 1;
+  userId: number = Number(localStorage.getItem("userId"));
 
   isMailSortingOn = false;
 
