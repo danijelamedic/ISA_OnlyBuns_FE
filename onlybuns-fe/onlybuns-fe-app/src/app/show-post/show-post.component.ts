@@ -8,7 +8,7 @@ import { User } from '../model/user.model';
 import { UserService } from '../services/user.service';
 import { Follower } from '../model/follower.mode';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-post',
@@ -46,7 +46,11 @@ export class ShowPostComponent {
   isFollowed: boolean = false;
 
   
-  constructor(private postService: PostService, private fb: FormBuilder, private userService: UserService,  private route: ActivatedRoute){
+  constructor(private postService: PostService, 
+              private fb: FormBuilder, 
+              private userService: UserService,  
+              private route: ActivatedRoute,
+              private router: Router){
     this.updateForm = this.fb.group({
       description: [''],
       image: [null]
@@ -55,15 +59,21 @@ export class ShowPostComponent {
 
   ngOnInit(): void {
 
-  this.route.queryParams.subscribe((params: { selectedTab?: string }) => {
-    const tab = params.selectedTab ? +params.selectedTab : 1;
-    this.selectedTab = tab;
-  });
+    this.route.queryParams.subscribe((params: { selectedTab?: string }) => {
+      const tab = params.selectedTab ? +params.selectedTab : 1;
+      this.selectedTab = tab;
 
-  this.getPosts();
-  this.getPostsByUserId(this.userId);
-  this.getFollowingPosts();
-}
+      if (tab === 2) {
+      this.getExplorePosts();
+    } else if (tab === 3) {
+      this.getFollowingPosts();
+    }
+    });
+
+    this.getPosts();
+    this.getPostsByUserId(this.userId);
+    this.getFollowingPosts();
+  }
 
 
 
@@ -268,6 +278,13 @@ loadFollowingComments(postId: number): void {
   }
 
   selectTab(tabNumber: number): void {
+
+    this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { selectedTab: tabNumber },
+        queryParamsHandling: 'merge'
+      });
+
     this.selectedTab = tabNumber;
     if (tabNumber === 2) {
       this.getExplorePosts();
@@ -344,7 +361,8 @@ loadFollowingComments(postId: number): void {
             this.posts[postIndex].imagePath = updatedPost.imagePath;
           }
           this.closeUpdateModal();
-          window.location.reload();
+          this.refreshCurrentTab();
+          //window.location.reload();
         },
         error: (error) => {
           console.error('Error updating post:', error);
@@ -424,7 +442,9 @@ loadFollowingComments(postId: number): void {
         if (result) {
           this.isFollowed = true;
           console.log("Successfully followed the user.");
-          window.location.reload();
+          this.refreshCurrentTab();
+
+          //window.location.reload();
         }
       },
       error: (error: any) => {
@@ -444,7 +464,9 @@ loadFollowingComments(postId: number): void {
         if(result){
           this.isFollowed = false;
           ("otpratio sam ga");
-          window.location.reload();
+          this.refreshCurrentTab();
+
+          // window.location.reload();
         }
       },
       error: (error: any) => {
@@ -474,4 +496,14 @@ loadFollowingComments(postId: number): void {
   //     }
   //   })
   // }
+
+  refreshCurrentTab(): void {
+  if (this.selectedTab === 1) {
+    this.getPostsByUserId(this.userId);
+  } else if (this.selectedTab === 2) {
+    this.getExplorePosts();
+  } else if (this.selectedTab === 3) {
+    this.getFollowingPosts();
+  }
+}
 }

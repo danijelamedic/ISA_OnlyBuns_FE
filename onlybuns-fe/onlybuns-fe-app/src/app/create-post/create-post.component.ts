@@ -26,6 +26,8 @@ export class CreatePostComponent implements OnInit {
   marker?: Marker;
   postForm!: FormGroup;
   selectedFile: File | null = null;
+  userId: number = Number(localStorage.getItem("userId"));
+
 
   successMessage: string = '';
   
@@ -135,7 +137,8 @@ locationCache: globalThis.Map<string, any> = new globalThis.Map();
 
 createPost(description: string, locationId: number): void {
 
-      const userId = this.userService.getUserId();
+      const userId = this.userId;
+
 
   const postData = {
     description,

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  userId: number = 1;  // Pocetna vrednost
+  userId: number = Number(localStorage.getItem("userId"));
   userRole: string | null = null;  // Dodano iz druge grane
   username: string | null = null;
 
@@ -18,7 +18,6 @@ export class NavbarComponent {
   ) { }
 
   ngOnChanges() {
-    this.userService.setUserId(this.userId);
   }
 
   onUserIdChange(): void {
@@ -53,6 +52,7 @@ export class NavbarComponent {
 
   ngOnInit() {
     this.username = localStorage.getItem('username');
+    this.onUserIdChange();
   }
 
 }
